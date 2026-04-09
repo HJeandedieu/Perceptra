@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ROOT VARIABLES */
+:root {
+  --surface: #0d0f12;
+  --surface-2: #141720;
+  --surface-3: #1c2029;
+  --border: #252a35;
+  --accent: #3d7ef7;
+  --accent-dim: #2a5cb5;
+  --gold: #b8952a;
+  --text-primary: #e8eaf0;
+  --text-secondary: #8c93a8;
+  --text-muted: #555d72;
+  --danger: #c0392b;
+}
+
+*{
+    box-sizing:border-box;
+    padding:0;
+    margin:0;
+}
+
+body{
+    background-color:var(--surface);
+    padding:0% 20%;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-secondary);
+    font-size:14px;
+}
+
+input, label, button, select, textarea{
+    font-family:inherit;
+    font-size:inherit
+}
+
+/* NAVBAR */
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+nav h1{
+    color: var(--text-primary);
+    
+}
+
+nav a{
+    text-decoration:none;
+    color: var(--text-secondary);
+}
+
+nav .links{
+    display:flex;
+    justify-content:space-between;
+    gap:1.5rem;
+}
+
+nav #status{
+    font-size:0.9rem;
+    font-weight:100;
+    color:var(--tex-muted);
+}
