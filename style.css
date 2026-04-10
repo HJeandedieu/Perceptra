@@ -42,7 +42,7 @@ nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:1% 20%;
+    padding:1% 15%;
     border-bottom: 1px solid var(--border)
 }
 .name{
@@ -77,7 +77,7 @@ nav #status{
     grid-template-columns:repeat(2, 1fr);
     align-items:center;
     justify-content:center;
-    padding:5% 20%;
+    padding:5% 15%;
     gap:5rem;
 }
 
@@ -250,7 +250,7 @@ nav #status{
 .system-features{
     background-color: rgb(20, 23, 32);
     border: 1px solid var(--border);
-    padding: 5% 20%;
+    padding: 5% 15%;
 }
 
 .features_title_span{
@@ -320,7 +320,7 @@ nav #status{
     justify-content:space-between;
     padding: 3rem;
     align-items:center;
-    margin:5% 20%;
+    margin:5% 15%;
     background: rgb(20, 23, 32);
     border: 1px solid var(--border)
 }
@@ -352,7 +352,7 @@ nav #status{
 footer{
     background-color: rgb(20, 23, 32);
     border-top: 1px solid var(--border);
-    padding: 3% 20%;
+    padding: 3% 15%;
 }
 
 .home-footer-content{
@@ -407,7 +407,7 @@ footer h3{
 /* ABOUT SENTRY */
 
 .about-intro-text{
-    padding: 5% 20%;
+    padding: 5% 15%;
     background-color: var(--surface)
 }
 
@@ -428,7 +428,7 @@ footer h3{
 .about-demonstration{
     background-color: rgb(20, 23, 32);
     border: 1px solid var(--border);
-    padding: 5% 20%;
+    padding: 5% 15%;
     display:grid;
     grid-template-columns: repeat(2, 1fr);
     justify-content:space-between;
@@ -478,6 +478,122 @@ footer h3{
     width:1.5rem;
 }
 
-.detection-intro-text h3{
-    
+.features-intro h1, p{
+    padding:1rem 0rem;
+}
+
+.technical-specs{
+    padding: 3% 15%;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.technical-specs div{
+    border: 1px solid var(--border);
+    padding: .5rem;
+}
+
+.specifications{
+    padding: 2% 15%
+}
+
+
+.specifications h1{
+    padding: 1rem 0rem;
+    font-size: 2rem;
+}
+
+
+.technical-specs div h1{
+    color: var(--accent);
+    font-family: var(--title-font)
+}
+
+.technical-specs div h3, p{
+    font-family: var(--generic-font);
+    text-transform: uppercase;
+    font-weight: 100;
+    font-size: .7rem;
+    color: var(--text-muted)
+}
+
+.technical-specs div p{
+    font-family: var(--general-font);
+    text-transform: capitalize;
+}
+
+/* TEAM */
+
+.team-main{
+    background-color: rgb(20, 23, 32);
+    padding-bottom: 5%
+}
+
+.team-members{
+    display: grid;
+    padding: 5% 15%;
+    grid-template-columns:repeat(5, 1fr);
+    gap: 1rem;
+    background:rgb(20, 23, 32)
+}
+
+.team-members h1{
+    font-family: var(--title-font);
+    font-size: 1rem;
+    font-weight: 100;
+    color: var(--text-primary)
+}
+
+.team-members > div{
+    border: 1px solid var(--border);
+    padding: 1rem
+}
+
+.team-members h3{
+    font-family: var(--generic-font);
+    text-transform: uppercase;
+    font-weight: 100;
+    font-size: .7rem;
+    color: var(--accent);
+    padding-top: .5rem;
+}
+
+.team-members p{
+    font-family: var(--general-font);
+    color: var(--text-secondary);
+    font-size:.8rem;
+    text-transform:none
+}
+
+.team-members .buttons{
+    border-top: 1px solid var(--border);
+    padding: .3rem 0rem;
+}
+
+.team-members button{
+    border: 1px solid var(--border);
+    font-size: .7rem;
+    background-color:transparent;
+    color: var(--text-muted);
+    padding: .3rem;
+    margin: .3rem
+}
+
+.academic-concept{
+    margin: 2% 15%;
+    padding:1rem;
+    border: 1px solid var(--border);
+}
+
+.academic-concept h3{
+    font-weight:100;
+    font-size:.7rem;
+    color: var(--text-muted)
+}
+
+.academic-concept p{
+    text-transform: none;
+    color: var(--text-secondary)
 }
