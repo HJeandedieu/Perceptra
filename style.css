@@ -403,3 +403,81 @@ footer h3{
     font-size: .7rem;
     color: var(--text-muted)
 }
+
+/* ABOUT SENTRY */
+
+.about-intro-text{
+    padding: 5% 20%;
+    background-color: var(--surface)
+}
+
+.about-intro-text h3{
+    font-family: var(--generic-font);
+    font-size:.7rem;
+    font-weight: 100;
+    color: var(--text-muted)
+}
+
+.about-intro-text h1{
+    font-family: var(--title-font);
+    font-weight: 100;
+    color: var(--text-primary);
+    font-size:2.5rem
+}
+
+.about-demonstration{
+    background-color: rgb(20, 23, 32);
+    border: 1px solid var(--border);
+    padding: 5% 20%;
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content:space-between;
+    gap:3rem;
+}
+
+.about-demonstration h1{
+    color: var(--text-primary);
+    font-family: var(--title-font);
+    font-weight:100;
+    font-size:1.5rem;
+    padding: 1rem 0rem;
+}
+
+.about-demonstration p{
+    line-height:1.5rem;
+    padding: .5rem 0rem;
+    font-weight:100;
+    font-size:.8rem;
+}
+
+.red-line{
+    background-color: var(--danger);
+    width:1.5rem;
+    height:.1rem;
+}
+
+.problem, .solution{
+    display:flex;
+    align-items:center;
+    gap: .5rem;
+    color: var(--danger);
+    font-family: var(--generic-font);
+    font-size:.7rem;
+    font-weight:100;
+}
+
+.problem h3{
+    font-weight: 100;
+}
+
+.solution{
+    color: var(--accent)
+}
+
+.solution .blue-line{
+    width:1.5rem;
+}
+
+.detection-intro-text h3{
+    
+}
