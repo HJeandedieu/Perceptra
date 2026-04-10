@@ -33,7 +33,8 @@ body{
 
 input, label, button, select, textarea{
     font-family:inherit;
-    font-size:inherit
+    font-size:inherit;
+    color: inherit
 }
 
 /* NAVBAR */
@@ -596,4 +597,52 @@ footer h3{
 .academic-concept p{
     text-transform: none;
     color: var(--text-secondary)
+}
+
+/* CONTACT US PAGE */
+
+.contact-section{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items:center;
+    gap: 5rem;
+    padding: 5% 15%;
+    background-color: rgb(20, 23, 32);
+}
+
+.contact-section h1{
+    font-family: var(--title-font);
+    font-weight:100;
+    color: var(--text-primary)
+}
+
+.reach{
+    font-size:1.2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+    width: 85%;
+    margin-bottom:1rem;
+}
+
+.contact-form{
+    border: 1px solid var(--border);
+    padding: 2rem 2rem;
+}
+
+.contact-form input, select, textarea{
+    width: 32rem;
+    padding:.5rem .5rem;
+    margin: .5rem 0rem;
+    background-color:var(--surface-3);
+    border:1px solid var(--border)
+}
+
+.contact-form button{
+    background-color: transparent;
+    border: 1px solid var(--border);
+    padding:.5rem;
+    text-align:center;
+    justify-self:center;
+    align-self:center;
+    width:100%;
 }
