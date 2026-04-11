@@ -479,6 +479,25 @@ footer h3{
     width:1.5rem;
 }
 
+.pipeline-flow{
+    display:flex;
+    padding: 0% 15%;
+    padding-bottom:3%;
+    align-items:center;
+}
+
+.step{
+    padding:1rem 1.5rem; 
+    background-color: rgb(20, 23, 32);
+    border: 1px solid var(--border);
+}
+
+.mute-line{
+    background-color: var(--border);
+    width:32rem;
+    height:.1rem;
+}
+
 .features-intro h1, p{
     padding:1rem 0rem;
 }
@@ -512,7 +531,7 @@ footer h3{
     font-family: var(--title-font)
 }
 
-.technical-specs div h3, p{
+.technical-specs div h3, .technical-specs div p{
     font-family: var(--generic-font);
     text-transform: uppercase;
     font-weight: 100;
@@ -540,9 +559,22 @@ footer h3{
     background:rgb(20, 23, 32)
 }
 
+.team-members .img{
+    display:flex;
+    gap: .5rem;
+    align-items:center;
+}
+
+.team-members img{
+    width:auto;
+    height:3.7rem;
+    overflow: hidden;
+    border-radius:100%;
+}
+
 .team-members h1{
     font-family: var(--title-font);
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 100;
     color: var(--text-primary)
 }
