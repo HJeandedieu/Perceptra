@@ -81,29 +81,69 @@
         <!-- PIPELINE FLOW -->
 
         <div class="pipeline-flow">
-            <div class="step">
-
-                <p>01</p>
-            </div>
-            <div class="mute-line"></div>
-            <div class="steps">
-                <p class="step">02</p>
-                <div class="step-desc">
-                    <h5>Camera Input</h5>
-                    <p>Live RTSP/HTTP video stream from cameras</p>
+            <div class="pipeline-steps">
+                <div class="steps">
+                    <div class="step-content">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        <p class="step">01</p>
+                    </div>
+                    <div class="step-desc">
+                        <h5>Camera Input</h5>
+                        <p>Live RTSP/HTTP video stream from cameras</p>
+                    </div>
                 </div>
             </div>
-            <div class="mute-line"></div>
-            <div class="step">
-                <p>03</p>
+            <div class="pipeline-steps">
+                <div class="steps">
+                    <div class="step-content">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        <p class="step">02</p>
+                    </div>
+                    <div class="step-desc">
+                        <h5>AI Model</h5>
+                        <p>Deep learning inference per frame</p>
+                    </div>
+                </div>
             </div>
-            <div class="mute-line"></div>
-            <div class="step">
-                <p>04</p>
+
+            <div class="pipeline-steps">
+                <div class="steps">
+                    <div class="step-content">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p class="step">03</p>
+                    </div>
+                    <div class="step-desc">
+                        <h5>Face Detection</h5>
+                        <p>Locate and extract facial embeddings</p>
+                    </div>
+                </div>
             </div>
-            <div class="mute-line"></div>
-            <div class="step">
-                <p>05</p>
+
+            
+            <div class="pipeline-steps">
+                <div class="steps">
+                    <div class="step-content">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                        <p class="step">04</p>
+                    </div>
+                    <div class="step-desc">
+                        <h5>Database Check</h5>
+                        <p>Compare against registered personnel</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pipeline-steps">
+                <div class="steps">
+                    <div class="step-contente">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        <p class="step">05</p>
+                    </div>
+                    <div class="step-desc">
+                        <h5>Alert Dispatch</h5>
+                        <p>Multi-channel notifications instantly</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
