@@ -486,10 +486,47 @@ footer h3{
     align-items:center;
 }
 
-.step{
-    padding:1rem 1.5rem; 
+.step-content::after{
+    content:"";
+    width:12rem;
+    display:inline-block;
+    height:.1rem;
+    background-color: var(--border);
+    position:absolute;
+    left:4rem;
+    top:50%;
+    transform: translateY(-50%)
+}
+
+.step-content, .step-contente{
+    position:relative;
+    padding:.5rem 1.5rem; 
     background-color: rgb(20, 23, 32);
     border: 1px solid var(--border);
+    width:fit-content;
+}
+.steps svg{
+    width:1rem;
+    height: auto;
+    color:var(--accent)
+}
+
+.steps p{
+    padding:0rem;
+}
+
+.step-desc{
+    padding-top:1rem;
+}
+
+.step-desc h5{
+    font-family: var(--title-font);
+    color: var(--text-primary);
+    font-weight:100;
+}
+
+.step-desc p{
+    font-size:.8rem;
 }
 
 .mute-line{
