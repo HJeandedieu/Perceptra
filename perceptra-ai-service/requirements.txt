@@ -15,9 +15,10 @@ numpy>=1.23.5,<2.0.0
 torch>=2.6.0
 torchvision>=0.21.0
 
-# Face recognition — tf 2.15 is last version before Keras 3 breaking change
+# Face recognition
 deepface==0.0.93
 tensorflow-cpu==2.15.0
+tf-keras==2.15.0
 
 # Testing
 pytest==8.2.0
