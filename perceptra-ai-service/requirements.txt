@@ -15,10 +15,10 @@ numpy>=1.23.5,<2.0.0
 torch>=2.6.0
 torchvision>=0.21.0
 
-# Face recognition
-deepface==0.0.93
-tensorflow-cpu==2.15.0
-tf-keras==2.15.0
+# Face recognition — disabled on Railway (too heavy for free tier)
+# deepface==0.0.93
+# tensorflow-cpu==2.15.0
+# tf-keras==2.15.0
 
 # Testing
 pytest==8.2.0
