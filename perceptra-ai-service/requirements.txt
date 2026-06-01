@@ -15,10 +15,9 @@ numpy>=1.23.5,<2.0.0
 torch>=2.6.0
 torchvision>=0.21.0
 
-# Face recognition
-deepface==0.0.93
+# Face recognition — 0.0.93 is incompatible with keras 3
+deepface==0.0.115
 tensorflow-cpu==2.16.1
-keras==2.15.0
 
 # Testing
 pytest==8.2.0
