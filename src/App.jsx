@@ -1,11 +1,19 @@
 import { useState } from 'react';
+import { BarChart3, Camera, Bell, Settings, LogOut } from 'lucide-react';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
 
+const navItems = [
+  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'live-feed', label: 'Live Feed', icon: Camera },
+  { id: 'alerts', label: 'Alerts', icon: Bell },
+  { id: 'settings', label: 'Settings', icon: Settings },
+];
+
 function App() {
   const [user, setUser] = useState(null);
+  const [activePage, setActivePage] = useState('analytics');
 
-  // Handles successful login — in production, token is validated against JWT
   const handleLogin = (userData) => {
     setUser(userData);
   };
@@ -20,7 +28,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-surface-950 flex">
-      {/* Simple sidebar placeholder — will be shared across all pages by Dorcas */}
       <aside className="w-16 lg:w-60 bg-surface-900 border-r border-surface-800 flex flex-col shrink-0">
         <div className="h-14 flex items-center gap-3 px-4 border-b border-surface-800">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center shrink-0">
@@ -29,23 +36,27 @@ function App() {
           <span className="text-sm font-semibold text-white hidden lg:block">PERCEPTRA</span>
         </div>
         <nav className="flex-1 p-3 space-y-1">
-          <NavItem active label="Analytics" icon="📊" />
-          <NavItem label="Live Feed" icon="📹" />
-          <NavItem label="Alerts" icon="🔔" />
-          <NavItem label="Settings" icon="⚙️" />
+          {navItems.map((item) => (
+            <NavItem
+              key={item.id}
+              active={activePage === item.id}
+              label={item.label}
+              Icon={item.icon}
+              onClick={() => setActivePage(item.id)}
+            />
+          ))}
         </nav>
         <div className="p-3 border-t border-surface-800">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-800 transition-colors"
           >
-            <span className="text-base">🚪</span>
+            <LogOut className="w-4 h-4" />
             <span className="hidden lg:block">Logout</span>
           </button>
         </div>
       </aside>
 
-      {/* Main content area */}
       <main className="flex-1 overflow-auto">
         <Analytics user={user} onLogout={handleLogout} />
       </main>
@@ -53,17 +64,18 @@ function App() {
   );
 }
 
-function NavItem({ label, icon, active }) {
+function NavItem({ label, Icon, active, onClick }) {
   return (
     <a
       href="#"
+      onClick={(e) => { e.preventDefault(); onClick?.(); }}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
         active
           ? 'bg-accent-500/10 text-accent-400'
           : 'text-gray-500 hover:text-gray-300 hover:bg-surface-800'
       }`}
     >
-      <span className="text-base">{icon}</span>
+      <Icon className="w-4 h-4" />
       <span className="hidden lg:block">{label}</span>
     </a>
   );

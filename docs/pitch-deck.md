@@ -129,10 +129,10 @@ Alerts:      Twilio (SMS) + SendGrid / Gmail SMTP (Email)
 
 | Sprint | Deliverable | Status |
 |---|---|---|
-| S1 | DB schema, Auth endpoints, YOLOv8 loads | ✅ Complete |
-| S2 | POST /api/detections, WebSocket, Twilio SMS tested | ✅ Complete |
-| S3 | All pages wired to backend, Analytics done, Docs drafted | ✅ Complete |
-| Post-S3 | Production deployment, load testing, pitch recording | 🔜 Next |
+| S1 | DB schema, Auth endpoints, YOLOv8 loads | Complete |
+| S2 | POST /api/detections, WebSocket, Twilio SMS tested | Complete |
+| S3 | All pages wired to backend, Analytics done, Docs drafted | Complete |
+| Post-S3 | Production deployment, load testing, pitch recording | Upcoming |
 
 ---
 

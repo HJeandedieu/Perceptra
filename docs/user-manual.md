@@ -52,23 +52,15 @@ Once logged in, the interface is divided into three areas:
 │                      │                                          │
 │  P  PERCEPTRA        │  [Header: Page Title + Date Range]       │
 │                      │                                          │
-│  📊 Analytics        │  [Content area varies by page]           │
-│  📹 Live Feed        │                                          │
-│  🔔 Alerts           │                                          │
-│  ⚙️ Settings         │                                          │
-│                      │                                          │
-│  🚪 Logout           │                                          │
+│  [Analytics]        │  [Content area varies by page]           │\n│  [Live Feed]        │                                          │\n│  [Alerts]           │                                          │\n│  [Settings]         │                                          │\n│                      │                                          │\n│  [Logout]           │                                          │
 └──────────────────────┴──────────────────────────────────────────┘
 ```
 
 ### Sidebar Navigation
 
-| Icon | Page | Description |
+| Page | Description |
 |---|---|---|
-| 📊 | Analytics | Statistics, charts, incident history |
-| 📹 | Live Feed | Real-time camera grid (Dorcas's page) |
-| 🔔 | Alerts | Active alert management (Dorcas's page) |
-| ⚙️ | Settings | System configuration |
+| Analytics | Statistics, charts, incident history |\n| Live Feed | Real-time camera grid (Dorcas's page) |\n| Alerts | Active alert management (Dorcas's page) |\n| Settings | System configuration |
 
 ---
 
@@ -121,10 +113,10 @@ The table lists all detection events with the following columns:
 
 | Level | Badge | Meaning |
 |---|---|---|
-| Low | 🟢 Green | Person detected — no immediate threat |
-| Medium | 🟡 Amber | Unusual activity — SMS alert sent |
-| High | 🔴 Red | Aggressive behaviour / breach — SMS + email |
-| Critical | 🟣 Purple | Weapon detected — all alerts + loudest alert |
+| Low | Green | Person detected — no immediate threat |
+| Medium | Amber | Unusual activity — SMS alert sent |
+| High | Red | Aggressive behaviour / breach — SMS + email |
+| Critical | Purple | Weapon detected — all alerts + loudest alert |
 
 ### 4.6 Exporting Data
 
