@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { BarChart3, Camera, Bell, Settings, LogOut } from 'lucide-react';
-import Login from './pages/Login';
-import Analytics from './pages/Analytics';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import OTPVerification from './pages/OTPVerification';
+import PasswordReset from './pages/PasswordReset';
+import TokenVerification from './pages/TokenVerification';
+import ChangePassword from './pages/ChangePassword';
+import Analytics from './pages/Analytics';
 
 const navItems = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -11,28 +16,38 @@ const navItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
+const AUTH_PAGES = ['login', 'signup', 'otp', 'forgot-password', 'token-verify', 'change-password'];
+
 function App() {
   const [user, setUser] = useState(null);
-  const [activePage, setActivePage] = useState('landing'); // 'landing', 'login', 'dashboard'
+  const [page, setPage] = useState('landing');
+
+  const navigate = (target) => setPage(target);
 
   const handleLogin = (userData) => {
     setUser(userData);
-    setActivePage('analytics');
+    setPage('analytics');
   };
 
   const handleLogout = () => {
     setUser(null);
-    setActivePage('landing');
+    setPage('landing');
   };
 
-  if (activePage === 'landing') {
-    return <Landing onNavigate={setActivePage} />;
+  // Landing page
+  if (page === 'landing') {
+    return <Landing onNavigate={navigate} />;
   }
 
-  if (activePage === 'login') {
-    return <Login onLogin={handleLogin} />;
-  }
+  // Auth pages (always use navigate helper)
+  if (page === 'login') return <Login onLogin={handleLogin} onNavigate={navigate} />;
+  if (page === 'signup') return <Signup onNavigate={navigate} />;
+  if (page === 'otp') return <OTPVerification onNavigate={navigate} />;
+  if (page === 'forgot-password') return <PasswordReset onNavigate={navigate} />;
+  if (page === 'token-verify') return <TokenVerification onNavigate={navigate} />;
+  if (page === 'change-password') return <ChangePassword onNavigate={navigate} />;
 
+  // Dashboard layout (authenticated)
   return (
     <div className="min-h-screen bg-surface-950 flex">
       <aside className="w-16 lg:w-60 bg-surface-900 border-r border-surface-800 flex flex-col shrink-0">
@@ -46,10 +61,10 @@ function App() {
           {navItems.map((item) => (
             <NavItem
               key={item.id}
-              active={activePage === item.id}
+              active={page === item.id}
               label={item.label}
               Icon={item.icon}
-              onClick={() => setActivePage(item.id)}
+              onClick={() => setPage(item.id)}
             />
           ))}
         </nav>
@@ -65,8 +80,7 @@ function App() {
       </aside>
 
       <main className="flex-1 overflow-auto">
-        {activePage === 'analytics' && <Analytics user={user} onLogout={handleLogout} />}
-        {/* Dorcas to implement Live Feed/Alerts components here */}
+        {page === 'analytics' && <Analytics user={user} onLogout={handleLogout} />}
       </main>
     </div>
   );

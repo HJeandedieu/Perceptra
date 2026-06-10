@@ -1,11 +1,10 @@
 import { Shield, Brain, Zap, Bell, ChevronRight, BarChart3, Camera } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Landing({ onNavigate }) {
   return (
     <div className="min-h-screen bg-surface-950 text-gray-300">
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-6">
+      <nav className="flex items-center justify-between px-8 py-6 absolute top-0 w-full z-20">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center">
             <span className="text-white font-bold">P</span>
@@ -14,38 +13,51 @@ export default function Landing({ onNavigate }) {
         </div>
         <div className="flex items-center gap-6 text-sm font-medium">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
-          <a href="#technology" className="hover:text-white transition-colors">Technology</a>
           <button 
             onClick={() => onNavigate('login')}
             className="px-4 py-2 bg-surface-800 hover:bg-surface-700 rounded-lg transition-colors text-white"
           >
             Sign In
           </button>
+          <button 
+            onClick={() => onNavigate('signup')}
+            className="px-4 py-2 bg-accent-500 hover:bg-accent-400 rounded-lg transition-colors text-white"
+          >
+            Sign Up
+          </button>
         </div>
       </nav>
 
       {/* Hero */}
-      <header className="px-8 pt-16 pb-24 text-center">
-        <h1 className="text-6xl font-bold text-white tracking-tighter mb-6 max-w-3xl mx-auto">
-          Real-Time Threat Detection That <span className="text-accent-400">Never Blinks</span>
-        </h1>
-        <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto">
-          PERCEPTRA leverages state-of-the-art YOLOv8 AI to monitor surveillance feeds, 
-          detect complex threats in milliseconds, and dispatch immediate alerts.
-        </p>
-        <div className="flex items-center justify-center gap-4">
-          <button className="px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-lg shadow-lg shadow-accent-500/20 transition-all">
-            Request Demo
-          </button>
-          <button className="px-6 py-3 bg-surface-800 hover:bg-surface-700 text-white font-semibold rounded-lg flex items-center gap-2 transition-all">
-            View Analytics <ChevronRight className="w-4 h-4" />
-          </button>
+      <header className="relative min-h-screen flex items-center justify-center px-8 text-center overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30"
+          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2000&auto=format&fit=crop)' }}
+        />
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-surface-950/50 via-surface-950/80 to-surface-950" />
+        
+        <div className="relative z-10 max-w-3xl">
+          <h1 className="text-6xl md:text-7xl font-bold text-white tracking-tighter mb-6">
+            Real-Time Threat Detection That <span className="text-accent-400">Never Blinks</span>
+          </h1>
+          <p className="text-lg text-gray-400 mb-10">
+            PERCEPTRA leverages state-of-the-art YOLOv8 AI to monitor surveillance feeds, 
+            detect complex threats in milliseconds, and dispatch immediate alerts.
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <button className="px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-lg shadow-lg shadow-accent-500/20 transition-all">
+              Request Demo
+            </button>
+            <button className="px-6 py-3 bg-surface-800 hover:bg-surface-700 text-white font-semibold rounded-lg flex items-center gap-2 transition-all">
+              View Analytics <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Features Grid */}
       <section id="features" className="px-8 py-20 bg-surface-900 border-y border-surface-800">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <FeatureCard 
             icon={Brain} 
             title="YOLOv8 AI Engine" 
