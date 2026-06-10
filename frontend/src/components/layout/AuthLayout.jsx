@@ -1,23 +1,32 @@
 import authHero from '../../assets/images/auth-hero.jpg';
 
-export default function AuthLayout({ children, imageTitle, imageUrl }) {
+export default function AuthLayout({ children, imageTitle }) {
   return (
-    <div className="min-h-screen flex bg-surface-950">
-      <div className="w-1/2 hidden lg:block relative">
-        <img 
-          src={imageUrl || authHero} 
-          alt="Security"
-          className="absolute inset-0 w-full h-full object-cover" 
-        />
-        <div className="absolute inset-0 bg-surface-950/70" />
-        <div className="absolute bottom-12 left-12 text-white max-w-lg">
-          <h2 className="text-4xl font-bold mb-4">{imageTitle || "Secure Your Perimeter"}</h2>
-          <p className="text-gray-300">PERCEPTRA real-time threat detection system.</p>
+    <div className="min-h-screen flex" style={{ backgroundColor: '#0a0b10' }}>
+      {/* Image side */}
+      <div className="w-1/2 hidden lg:block relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src={authHero} 
+            alt="Security"
+            className="w-full h-full object-cover scale-105" 
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(10,11,16,0.85) 0%, rgba(10,11,16,0.4) 50%, rgba(10,11,16,0.85) 100%)' }} />
+        </div>
+        <div className="absolute bottom-12 left-12 right-12">
+          <div className="glass rounded-2xl p-8">
+            <h2 className="text-4xl font-bold text-white mb-3">{imageTitle || "Secure Your Perimeter"}</h2>
+            <p className="text-gray-300 text-sm">PERCEPTRA real-time threat detection system powered by YOLOv8 AI.</p>
+          </div>
         </div>
       </div>
+      
+      {/* Form side */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
-          {children}
+          <div className="glass-strong rounded-2xl p-8">
+            {children}
+          </div>
         </div>
       </div>
     </div>

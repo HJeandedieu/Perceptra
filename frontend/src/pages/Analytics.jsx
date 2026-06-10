@@ -1,5 +1,4 @@
 import {
-  Calendar,
   Download,
   TrendingUp,
   TrendingDown,
@@ -29,10 +28,10 @@ const iconMap = {
 function StatCard({ item }) {
   const Icon = iconMap[item.icon] || Activity;
   return (
-    <div className="stat-card">
+    <div className="glass-card rounded-xl p-5 hover:bg-white/[0.08] transition-all duration-300">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-gray-500">{item.label}</span>
-        <div className="w-8 h-8 rounded-lg bg-surface-700 flex items-center justify-center">
+        <span className="text-sm text-gray-400">{item.label}</span>
+        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center backdrop-blur-sm">
           <Icon className="w-4 h-4 text-accent-400" />
         </div>
       </div>
@@ -68,36 +67,32 @@ function SeverityBadge({ severity }) {
 
 export default function Analytics() {
   return (
-    <div className="min-h-screen bg-surface-950">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-surface-950/95 backdrop-blur-sm border-b border-surface-800">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-white">Analytics & Reports</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Detection statistics and incident history</p>
+    <div className="min-h-screen" style={{ backgroundColor: '#0a0b10' }}>
+      {/* Header - glass nav */}
+      <header className="glass-nav sticky top-0 z-10 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-white">Analytics & Reports</h1>
+          <p className="text-xs text-gray-500 mt-0.5">Detection statistics and incident history</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 glass rounded-lg p-1">
+            {['7d', '30d', '90d'].map((range) => (
+              <button
+                key={range}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  range === '7d'
+                    ? 'bg-accent-500 text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                {range}
+              </button>
+            ))}
           </div>
-          <div className="flex items-center gap-3">
-            {/* Date Range Selector */}
-            <div className="flex items-center gap-1 bg-surface-800 rounded-lg p-1 border border-surface-700">
-              {['7d', '30d', '90d'].map((range) => (
-                <button
-                  key={range}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                    range === '7d'
-                      ? 'bg-accent-500 text-white shadow-sm'
-                      : 'text-gray-500 hover:text-gray-300'
-                  }`}
-                >
-                  {range}
-                </button>
-              ))}
-            </div>
-            {/* Export Button */}
-            <button className="flex items-center gap-2 px-3 py-2 bg-surface-800 hover:bg-surface-700 border border-surface-700 rounded-lg text-xs font-medium text-gray-300 transition-colors">
-              <Download className="w-3.5 h-3.5" />
-              <span>Export</span>
-            </button>
-          </div>
+          <button className="flex items-center gap-2 px-3 py-2 glass hover:bg-white/10 rounded-lg text-xs font-medium text-gray-300 transition-all">
+            <Download className="w-3.5 h-3.5" />
+            <span>Export</span>
+          </button>
         </div>
       </header>
 
@@ -109,8 +104,8 @@ export default function Analytics() {
           ))}
         </div>
 
-        {/* Chart Section */}
-        <div className="stat-card">
+        {/* Chart Section - glass */}
+        <div className="glass-card rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold text-white">Detection Timeline</h2>
             <div className="flex items-center gap-4">
@@ -127,7 +122,7 @@ export default function Analytics() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={timelineData} barGap={4}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#22252f" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis
                   dataKey="date"
                   axisLine={false}
@@ -141,8 +136,9 @@ export default function Analytics() {
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#191b24',
-                    border: '1px solid #2c2f3a',
+                    backgroundColor: 'rgba(17, 18, 24, 0.9)',
+                    backdropFilter: 'blur(16px)',
+                    border: '1px solid rgba(255,255,255,0.06)',
                     borderRadius: '8px',
                     fontSize: '12px',
                   }}
@@ -155,36 +151,36 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Incident History Table */}
-        <div className="stat-card !p-0 overflow-hidden">
-          <div className="px-5 py-4 border-b border-surface-700 flex items-center justify-between">
+        {/* Incident History Table - glass */}
+        <div className="glass-card rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-white">Incident History</h2>
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 placeholder="Search incidents..."
-                className="bg-surface-800 border border-surface-700 rounded-lg px-3 py-1.5 text-xs text-gray-300 placeholder-gray-600 focus:outline-none focus:border-accent-500/50"
+                className="glass-input rounded-lg px-3 py-1.5 text-xs text-gray-300 placeholder-gray-600 outline-none"
               />
             </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-surface-700">
-                  <th className="table-header text-left px-5 py-3">Incident ID</th>
-                  <th className="table-header text-left px-5 py-3">Timestamp</th>
-                  <th className="table-header text-left px-5 py-3">Camera</th>
-                  <th className="table-header text-left px-5 py-3">Label</th>
-                  <th className="table-header text-left px-5 py-3">Confidence</th>
-                  <th className="table-header text-left px-5 py-3">Severity</th>
-                  <th className="table-header text-left px-5 py-3">Status</th>
+                <tr className="border-b border-white/5">
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Incident ID</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Timestamp</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Camera</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Label</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Confidence</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Severity</th>
+                  <th className="text-xs font-semibold uppercase tracking-wider text-gray-500 text-left px-5 py-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-surface-800">
+              <tbody className="divide-y divide-white/5">
                 {incidents.map((inc) => (
                   <tr
                     key={inc.id}
-                    className="hover:bg-surface-800/50 transition-colors cursor-pointer"
+                    className="hover:bg-white/[0.03] transition-colors cursor-pointer"
                   >
                     <td className="px-5 py-3 font-mono text-xs text-gray-300">{inc.id}</td>
                     <td className="px-5 py-3 text-gray-400">{inc.timestamp}</td>
@@ -194,7 +190,7 @@ export default function Analytics() {
                     <td className="px-5 py-3 text-gray-300">{inc.label}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 rounded-full bg-surface-700 overflow-hidden">
+                        <div className="w-16 h-1.5 rounded-full bg-white/10 overflow-hidden">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-accent-500 to-accent-400"
                             style={{ width: `${Math.round(inc.confidence * 100)}%` }}
@@ -239,27 +235,16 @@ export default function Analytics() {
               </tbody>
             </table>
           </div>
-          {/* Table footer with pagination */}
-          <div className="px-5 py-3 border-t border-surface-700 flex items-center justify-between">
+          <div className="px-5 py-3 border-t border-white/5 flex items-center justify-between">
             <span className="text-xs text-gray-600">Showing 10 of 12,847 incidents</span>
             <div className="flex items-center gap-1">
-              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-700 rounded transition-colors">
-                Previous
-              </button>
-              <button className="px-2.5 py-1 text-xs text-white bg-accent-500 rounded">1</button>
-              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-700 rounded transition-colors">
-                2
-              </button>
-              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-700 rounded transition-colors">
-                3
-              </button>
+              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded transition-all">Previous</button>
+              <button className="px-2.5 py-1 text-xs text-white bg-accent-500 rounded shadow-sm">1</button>
+              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded transition-all">2</button>
+              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded transition-all">3</button>
               <span className="px-1 text-xs text-gray-700">...</span>
-              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-700 rounded transition-colors">
-                1,285
-              </button>
-              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-700 rounded transition-colors">
-                Next
-              </button>
+              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded transition-all">1,285</button>
+              <button className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded transition-all">Next</button>
             </div>
           </div>
         </div>

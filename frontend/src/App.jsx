@@ -16,8 +16,6 @@ const navItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-const AUTH_PAGES = ['login', 'signup', 'otp', 'forgot-password', 'token-verify', 'change-password'];
-
 function App() {
   const [user, setUser] = useState(null);
   const [page, setPage] = useState('landing');
@@ -34,12 +32,10 @@ function App() {
     setPage('landing');
   };
 
-  // Landing page
   if (page === 'landing') {
     return <Landing onNavigate={navigate} />;
   }
 
-  // Auth pages (always use navigate helper)
   if (page === 'login') return <Login onLogin={handleLogin} onNavigate={navigate} />;
   if (page === 'signup') return <Signup onNavigate={navigate} />;
   if (page === 'otp') return <OTPVerification onNavigate={navigate} />;
@@ -47,12 +43,12 @@ function App() {
   if (page === 'token-verify') return <TokenVerification onNavigate={navigate} />;
   if (page === 'change-password') return <ChangePassword onNavigate={navigate} />;
 
-  // Dashboard layout (authenticated)
   return (
-    <div className="min-h-screen bg-surface-950 flex">
-      <aside className="w-16 lg:w-60 bg-surface-900 border-r border-surface-800 flex flex-col shrink-0">
-        <div className="h-14 flex items-center gap-3 px-4 border-b border-surface-800">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center shrink-0">
+    <div className="min-h-screen flex" style={{ backgroundColor: '#0a0b10' }}>
+      {/* Sidebar - glass */}
+      <aside className="glass-sidebar w-16 lg:w-60 flex flex-col shrink-0">
+        <div className="h-14 flex items-center gap-3 px-4 border-b border-white/5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center shrink-0 shadow-lg shadow-accent-500/20">
             <span className="text-white text-xs font-bold">P</span>
           </div>
           <span className="text-sm font-semibold text-white hidden lg:block">PERCEPTRA</span>
@@ -68,10 +64,10 @@ function App() {
             />
           ))}
         </nav>
-        <div className="p-3 border-t border-surface-800">
+        <div className="p-3 border-t border-white/5">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 hover:bg-surface-800 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-all"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden lg:block">Logout</span>
@@ -91,10 +87,10 @@ function NavItem({ label, Icon, active, onClick }) {
     <a
       href="#"
       onClick={(e) => { e.preventDefault(); onClick?.(); }}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
         active
-          ? 'bg-accent-500/10 text-accent-400'
-          : 'text-gray-500 hover:text-gray-300 hover:bg-surface-800'
+          ? 'glass text-accent-400'
+          : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
       }`}
     >
       <Icon className="w-4 h-4" />

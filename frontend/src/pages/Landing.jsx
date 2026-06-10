@@ -3,11 +3,11 @@ import landingHero from '../assets/images/landing-hero.jpg';
 
 export default function Landing({ onNavigate }) {
   return (
-    <div className="min-h-screen bg-surface-950 text-gray-300">
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-6 absolute top-0 w-full z-20">
+    <div className="min-h-screen text-gray-300" style={{ backgroundColor: '#0a0b10' }}>
+      {/* Navbar - glass */}
+      <nav className="glass-nav flex items-center justify-between px-8 py-4 fixed top-0 w-full z-20">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-500 to-perceptra-critical flex items-center justify-center shadow-lg shadow-accent-500/20">
             <span className="text-white font-bold">P</span>
           </div>
           <span className="text-xl font-bold text-white">PERCEPTRA</span>
@@ -16,13 +16,13 @@ export default function Landing({ onNavigate }) {
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <button 
             onClick={() => onNavigate('login')}
-            className="px-4 py-2 bg-surface-800 hover:bg-surface-700 rounded-lg transition-colors text-white"
+            className="px-4 py-2 glass hover:bg-white/10 rounded-lg transition-all text-white"
           >
             Sign In
           </button>
           <button 
             onClick={() => onNavigate('signup')}
-            className="px-4 py-2 bg-accent-500 hover:bg-accent-400 rounded-lg transition-colors text-white"
+            className="px-4 py-2 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-lg transition-all shadow-lg shadow-accent-500/20"
           >
             Sign Up
           </button>
@@ -32,33 +32,36 @@ export default function Landing({ onNavigate }) {
       {/* Hero */}
       <header className="relative min-h-screen flex items-center justify-center px-8 text-center overflow-hidden">
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat scale-105"
           style={{ backgroundImage: `url(${landingHero})` }}
         />
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-surface-950 via-surface-950/70 to-surface-950/30" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#0a0b10] via-[#0a0b10]/70 to-[#0a0b10]/30" />
         
         <div className="relative z-10 max-w-3xl">
-          <h1 className="text-6xl md:text-7xl font-bold text-white tracking-tighter mb-6">
-            Real-Time Threat Detection That <span className="text-accent-400">Never Blinks</span>
-          </h1>
-          <p className="text-lg text-gray-400 mb-10">
-            PERCEPTRA leverages state-of-the-art YOLOv8 AI to monitor surveillance feeds, 
-            detect complex threats in milliseconds, and dispatch immediate alerts.
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <button className="px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-lg shadow-lg shadow-accent-500/20 transition-all">
-              Request Demo
-            </button>
-            <button className="px-6 py-3 bg-surface-800 hover:bg-surface-700 text-white font-semibold rounded-lg flex items-center gap-2 transition-all">
-              View Analytics <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="glass-card rounded-2xl px-10 py-12 inline-block w-full">
+            <h1 className="text-5xl md:text-6xl font-bold text-white tracking-tighter mb-6">
+              Real-Time Threat Detection That <span className="text-accent-400">Never Blinks</span>
+            </h1>
+            <p className="text-base text-gray-400 mb-8 max-w-xl mx-auto">
+              PERCEPTRA leverages state-of-the-art YOLOv8 AI to monitor surveillance feeds, 
+              detect complex threats in milliseconds, and dispatch immediate alerts.
+            </p>
+            <div className="flex items-center justify-center gap-4">
+              <button className="px-6 py-3 bg-accent-500 hover:bg-accent-400 text-white font-semibold rounded-lg shadow-lg shadow-accent-500/20 transition-all">
+                Request Demo
+              </button>
+              <button className="px-6 py-3 glass hover:bg-white/10 text-white font-semibold rounded-lg flex items-center gap-2 transition-all">
+                View Analytics <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Features Grid */}
-      <section id="features" className="px-8 py-20 bg-surface-900 border-y border-surface-800">
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <section id="features" className="px-8 py-24" style={{ backgroundColor: '#0a0b10' }}>
+        <h2 className="text-3xl font-bold text-white text-center mb-12">Why PERCEPTRA</h2>
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <FeatureCard 
             icon={Brain} 
             title="YOLOv8 AI Engine" 
@@ -78,7 +81,7 @@ export default function Landing({ onNavigate }) {
       </section>
 
       {/* Footer */}
-      <footer className="px-8 py-12 text-center text-sm text-gray-600">
+      <footer className="px-8 py-12 text-center text-sm text-gray-600 border-t border-white/5">
         &copy; 2026 PERCEPTRA Threat Detection Platform. All rights reserved.
       </footer>
     </div>
@@ -87,12 +90,12 @@ export default function Landing({ onNavigate }) {
 
 function FeatureCard({ icon: Icon, title, desc }) {
   return (
-    <div className="p-6 rounded-2xl bg-surface-950 border border-surface-800">
-      <div className="w-12 h-12 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4">
+    <div className="glass-card rounded-2xl p-7 hover:bg-white/[0.08] transition-all duration-300">
+      <div className="w-12 h-12 rounded-xl bg-accent-500/10 flex items-center justify-center mb-4 backdrop-blur-sm">
         <Icon className="w-6 h-6 text-accent-400" />
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-      <p className="text-sm text-gray-400">{desc}</p>
+      <p className="text-sm text-gray-400 leading-relaxed">{desc}</p>
     </div>
   );
 }
