@@ -8,16 +8,16 @@ httpx==0.27.0
 # WebSocket client
 websockets==12.0
 
-# Numpy — pinned for tensorflow-cpu compatibility
+# Numpy — pinned for tensorflow compatibility
 numpy>=1.23.5,<2.0.0
 
 # PyTorch — CPU build
 torch>=2.6.0
 torchvision>=0.21.0
 
-# Face recognition — 0.0.93 is incompatible with keras 3
-deepface==0.0.115
-tensorflow-cpu==2.16.1
+# Face recognition — tf 2.15 is last version before Keras 3 breaking change
+deepface==0.0.93
+tensorflow-cpu==2.15.0
 
 # Testing
 pytest==8.2.0
