@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BarChart3, Camera, Bell, Settings, LogOut } from 'lucide-react';
 import Login from './pages/Login';
 import Analytics from './pages/Analytics';
+import Landing from './pages/Landing';
 
 const navItems = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -12,17 +13,23 @@ const navItems = [
 
 function App() {
   const [user, setUser] = useState(null);
-  const [activePage, setActivePage] = useState('analytics');
+  const [activePage, setActivePage] = useState('landing'); // 'landing', 'login', 'dashboard'
 
   const handleLogin = (userData) => {
     setUser(userData);
+    setActivePage('analytics');
   };
 
   const handleLogout = () => {
     setUser(null);
+    setActivePage('landing');
   };
 
-  if (!user) {
+  if (activePage === 'landing') {
+    return <Landing onNavigate={setActivePage} />;
+  }
+
+  if (activePage === 'login') {
     return <Login onLogin={handleLogin} />;
   }
 
@@ -58,7 +65,8 @@ function App() {
       </aside>
 
       <main className="flex-1 overflow-auto">
-        <Analytics user={user} onLogout={handleLogout} />
+        {activePage === 'analytics' && <Analytics user={user} onLogout={handleLogout} />}
+        {/* Dorcas to implement Live Feed/Alerts components here */}
       </main>
     </div>
   );
