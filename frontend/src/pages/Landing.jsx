@@ -32,10 +32,10 @@ export default function Landing({ onNavigate }) {
       {/* Hero */}
       <header className="relative min-h-screen flex items-center justify-center px-8 text-center overflow-hidden">
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30"
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${landingHero})` }}
         />
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-surface-950/50 via-surface-950/80 to-surface-950" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-surface-950 via-surface-950/70 to-surface-950/30" />
         
         <div className="relative z-10 max-w-3xl">
           <h1 className="text-6xl md:text-7xl font-bold text-white tracking-tighter mb-6">
