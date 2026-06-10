@@ -1,9 +1,11 @@
+import authHero from '../../assets/images/auth-hero.jpg';
+
 export default function AuthLayout({ children, imageTitle, imageUrl }) {
   return (
     <div className="min-h-screen flex bg-surface-950">
       <div className="w-1/2 hidden lg:block relative">
         <img 
-          src={imageUrl || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"} 
+          src={imageUrl || authHero} 
           alt="Security"
           className="absolute inset-0 w-full h-full object-cover" 
         />

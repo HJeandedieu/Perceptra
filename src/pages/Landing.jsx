@@ -1,4 +1,5 @@
-import { Shield, Brain, Zap, Bell, ChevronRight, BarChart3, Camera } from 'lucide-react';
+import { Shield, Brain, Zap, Bell, ChevronRight } from 'lucide-react';
+import landingHero from '../assets/images/landing-hero.jpg';
 
 export default function Landing({ onNavigate }) {
   return (
@@ -32,7 +33,7 @@ export default function Landing({ onNavigate }) {
       <header className="relative min-h-screen flex items-center justify-center px-8 text-center overflow-hidden">
         <div 
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30"
-          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2000&auto=format&fit=crop)' }}
+          style={{ backgroundImage: `url(${landingHero})` }}
         />
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-surface-950/50 via-surface-950/80 to-surface-950" />
         

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Shield, Eye, Lock, Mail, User } from 'lucide-react';
-import AuthLayout from '../components/AuthLayout';
+import AuthLayout from '../components/layout/AuthLayout';
 
 export default function Signup({ onNavigate }) {
   const [name, setName] = useState('');
