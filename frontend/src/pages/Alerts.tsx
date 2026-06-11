@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
+import { getAlerts as getAlertsApi, dismissAlert as dismissAlertApi } from '../api/alerts'
+import type { Alert as ApiAlert } from '../api/alerts'
 
 const MAP_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuCt68MFHmQ9f7U-iDU1bBuhnSmxuQ2IHA6Nf7WW9j90NZPmxKVHwcBhxnPx1_qD7Gxx9meXgEt6ddEyJsOp63TUa7M81uoFQNFXVkt5c6kiysBh0clv5W9j4TAp9eh4vhAx8v8SAtHV6XmWYEeLFuPyKEp3cIeiY2xzpsI5eHQHu3zDoKZ0UWVlnfPVxnSC2w8ckmJkEXuuL1yuWyqX1QjonGhI5in5J1XmvNYJihYllOCeBoH4n5otIsTJeywYylqwqtX1z5b1PiI'
 
-interface Alert {
+interface LocalAlert {
   id: number
   severity: 'Critical' | 'High' | 'Medium' | 'Low'
   title: string
@@ -15,45 +17,78 @@ interface Alert {
   icon: string
   color: string
   bgColor: string
+  apiId?: string
 }
 
-const initialAlerts: Alert[] = [
-  {
-    id: 1, severity: 'Critical', title: 'Unauthorized Perimeter Breach',
-    time: '2 mins ago', location: 'North Gate - Sector 4', meta: 'Multiple Subjects', metaIcon: 'group',
-    icon: 'warning', color: '#7C3AED', bgColor: 'rgba(124,58,237,0.2)',
-  },
-  {
-    id: 2, severity: 'High', title: 'Aggressive Behavior Detected',
-    time: '14 mins ago', location: 'Main Lobby - Zone B', meta: 'Single Subject', metaIcon: 'person',
-    icon: 'running_with_errors', color: '#EF4444', bgColor: 'rgba(239,68,68,0.2)',
-  },
-  {
-    id: 3, severity: 'Medium', title: 'Person Detected: Restricted Area',
-    time: '32 mins ago', location: 'Server Room - Level 2', meta: 'Authorized Personnel Search', metaIcon: 'verified_user',
-    icon: 'person_search', color: '#F59E0B', bgColor: 'rgba(245,158,11,0.2)',
-  },
-  {
-    id: 4, severity: 'Low', title: 'Sensor Calibration Required',
-    time: '1 hour ago', location: 'Rooftop - Cam 09', meta: 'Maintenance Task', metaIcon: 'build',
-    icon: 'check_circle', color: '#22C55E', bgColor: 'rgba(34,197,94,0.2)',
-  },
-  {
-    id: 5, severity: 'High', title: 'Hardware Thermal Warning',
-    time: '2 hours ago', location: 'Data Hub - Core 1', meta: 'Over 85°C Detected', metaIcon: 'thermostat',
-    icon: 'fire_extinguisher', color: '#EF4444', bgColor: 'rgba(239,68,68,0.2)',
-  },
+const fallbackAlerts: LocalAlert[] = [
+  { id: 1, severity: 'Critical', title: 'Unauthorized Perimeter Breach', time: '2 mins ago', location: 'North Gate - Sector 4', meta: 'Multiple Subjects', metaIcon: 'group', icon: 'warning', color: '#7C3AED', bgColor: 'rgba(124,58,237,0.2)' },
+  { id: 2, severity: 'High', title: 'Aggressive Behavior Detected', time: '14 mins ago', location: 'Main Lobby - Zone B', meta: 'Single Subject', metaIcon: 'person', icon: 'running_with_errors', color: '#EF4444', bgColor: 'rgba(239,68,68,0.2)' },
+  { id: 3, severity: 'Medium', title: 'Person Detected: Restricted Area', time: '32 mins ago', location: 'Server Room - Level 2', meta: 'Authorized Personnel Search', metaIcon: 'verified_user', icon: 'person_search', color: '#F59E0B', bgColor: 'rgba(245,158,11,0.2)' },
+  { id: 4, severity: 'Low', title: 'Sensor Calibration Required', time: '1 hour ago', location: 'Rooftop - Cam 09', meta: 'Maintenance Task', metaIcon: 'build', icon: 'check_circle', color: '#22C55E', bgColor: 'rgba(34,197,94,0.2)' },
+  { id: 5, severity: 'High', title: 'Hardware Thermal Warning', time: '2 hours ago', location: 'Data Hub - Core 1', meta: 'Over 85°C Detected', metaIcon: 'thermostat', icon: 'fire_extinguisher', color: '#EF4444', bgColor: 'rgba(239,68,68,0.2)' },
 ]
+
+const severityMap: Record<string, LocalAlert['severity']> = {
+  Low: 'Low', Medium: 'Medium', High: 'High', Critical: 'Critical',
+}
+
+function apiToLocal(a: ApiAlert, index: number): LocalAlert {
+  const s = severityMap[a.severity] ?? 'Medium'
+  const colorMap: Record<string, string> = { Low: '#22C55E', Medium: '#F59E0B', High: '#EF4444', Critical: '#7C3AED' }
+  const iconMap: Record<string, string> = { Low: 'check_circle', Medium: 'person_search', High: 'running_with_errors', Critical: 'warning' }
+  return {
+    id: index + 1,
+    severity: s,
+    title: a.title,
+    time: formatRelativeTime(a.timestamp),
+    location: a.location,
+    meta: a.meta ?? '',
+    metaIcon: a.metaIcon ?? 'info',
+    icon: iconMap[s] ?? 'warning',
+    color: colorMap[s] ?? '#7C3AED',
+    bgColor: `${colorMap[s] ?? '#7C3AED'}33`,
+    apiId: a.id,
+  }
+}
+
+function formatRelativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins} mins ago`
+  const hrs = Math.floor(mins / 60)
+  return `${hrs} hour${hrs > 1 ? 's' : ''} ago`
+}
 
 
 
 export default function Alerts() {
-  const [alerts, setAlerts] = useState(initialAlerts)
+  const [alerts, setAlerts] = useState<LocalAlert[]>(fallbackAlerts)
   const [filter, setFilter] = useState<string>('All')
   const [exiting, setExiting] = useState<Set<number>>(new Set())
+  const [loading, setLoading] = useState(true)
 
-  const dismiss = (id: number) => {
+  // Fetch alerts from API on mount — fall back to static data if unavailable
+  useEffect(() => {
+    let cancelled = false
+    getAlertsApi()
+      .then((res) => {
+        if (!cancelled && res.alerts.length > 0) {
+          setAlerts(res.alerts.map((a, i) => apiToLocal(a, i)))
+        }
+      })
+      .catch(() => { /* API not available — keep fallback */ })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [])
+
+  const dismiss = async (id: number) => {
+    const alert = alerts.find((a) => a.id === id)
     setExiting((prev) => new Set(prev).add(id))
+    // Call API if we have an apiId
+    if (alert?.apiId) {
+      dismissAlertApi(alert.apiId).catch(() => { /* ignore */ })
+    }
     setTimeout(() => {
       setAlerts((prev) => prev.filter((a) => a.id !== id))
       setExiting((prev) => {
