@@ -1,0 +1,30 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "Albert/auth-system",
+    "Dorcas/Dashboard",
+    "Niel/analytics",
+    "Niel/login",
+    "RedBlue",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "Albert/auth-system": "main",
+    "Dorcas/Dashboard": "main",
+    "Niel/analytics": "main",
+    "Niel/login": "main",
+    "RedBlue": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "Albert/auth-system",
+    "Dorcas/Dashboard",
+    "Niel/analytics",
+    "Niel/login",
+    "RedBlue",
+    "origin"
+  ]
+}
