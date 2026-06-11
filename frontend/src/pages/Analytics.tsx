@@ -1,5 +1,15 @@
+import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
+import { getReports } from '../api/reports'
+import type { ReportStats } from '../api/reports'
 
+const defaultStats: ReportStats = {
+  total_incidents: 1284,
+  avg_confidence: 94.2,
+  critical_alerts: 8,
+  active_time_hours: 342,
+  incident_trend: -12,
+}
 
 
 const chartBars = [
@@ -36,6 +46,38 @@ const severityConfig = {
 }
 
 export default function Analytics() {
+  const [stats, setStats] = useState(defaultStats)
+  const [events, setEvents] = useState(tableData)
+  const [chartData, setChartData] = useState(chartBars)
+
+  useEffect(() => {
+    let cancelled = false
+    getReports()
+      .then((res) => {
+        if (cancelled) return
+        if (res.stats) setStats(res.stats)
+        if (res.events?.length) {
+          setEvents(res.events.map((e) => ({
+            id: e.id ?? 'N/A',
+            label: e.label,
+            severity: e.severity as 'Critical' | 'High' | 'Medium' | 'Low',
+            confidence: (e.confidence * 100).toFixed(1) + '%',
+            timestamp: new Date(e.timestamp).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          })))
+        }
+        if (res.chart?.length) {
+          setChartData(res.chart.map((c) => ({
+            pct: Math.min(Math.round(c.count * 10), 100),
+            label: '',
+            critical: c.severity === 'Critical' || c.severity === 'High',
+            high: c.severity === 'High',
+          })))
+        }
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
   return (
     <div className="bg-background text-text-body min-h-screen font-body-md">
       {/* Atmosphere decor */}
@@ -109,7 +151,7 @@ export default function Analytics() {
               <div className="flex justify-between items-start mb-4">
                 <span className="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg">security</span>
                 <span className="text-threat-low font-label-sm text-label-sm flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm">trending_down</span> 12%
+                  <span className="material-symbols-outlined text-sm">trending_down</span> {Math.abs(stats.incident_trend)}%
                 </span>
               </div>
               <p className="text-on-surface-variant font-label-caps text-label-caps mb-1">Total Incidents</p>
@@ -201,7 +243,7 @@ export default function Analytics() {
               </div>
             </div>
             <div className="flex-1 w-full flex items-end gap-2 pb-4">
-              {chartBars.map((bar, i) => (
+              {chartData.map((bar, i) => (
                 <div
                   key={i}
                   className="flex-1 rounded-t-sm hover:brightness-150 transition-all cursor-help relative group"
@@ -274,7 +316,7 @@ export default function Analytics() {
                   </tr>
                 </thead>
                 <tbody className="text-sm font-body-md divide-y divide-glass-stroke/30">
-                  {tableData.map((row) => {
+                  {events.map((row) => {
                     const config = severityConfig[row.severity]
                     return (
                       <tr key={row.id} className="hover:bg-white/5 transition-colors group">
