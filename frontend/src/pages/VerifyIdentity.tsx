@@ -66,7 +66,12 @@ export default function VerifyIdentity() {
   }, [])
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 text-on-surface bg-background relative overflow-hidden">
+    <div className="bg-mesh min-h-screen flex flex-col items-center justify-center p-6 text-on-surface relative overflow-hidden">
+      {/* Subtle background movement */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[10%] left-[20%] w-[40rem] h-[40rem] bg-primary/5 rounded-full blur-[120px] animate-subtle-pulse" />
+        <div className="absolute bottom-[10%] right-[10%] w-[30rem] h-[30rem] bg-threat-critical/5 rounded-full blur-[100px] animate-subtle-pulse-reverse" />
+      </div>
       {/* Header */}
       <header className="fixed top-0 w-full flex justify-between items-center px-container-margin py-8 z-50">
         <div className="flex items-center gap-3">
@@ -164,6 +169,18 @@ export default function VerifyIdentity() {
           <a className="hover:text-primary transition-colors hover:underline underline-offset-4" href="#">System Status</a>
         </div>
       </footer>
+
+      {/* SVG Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-20">
+        <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect fill="url(#grid)" height="100%" width="100%" />
+        </svg>
+      </div>
     </div>
   )
 }

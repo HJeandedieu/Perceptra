@@ -8,38 +8,12 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="bg-background text-on-surface flex flex-col min-h-screen items-center justify-center relative px-6 py-20 font-body-md">
-      {/* Cyber grid */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
-      <div
-        className="glow-accent top-0 left-0"
-        style={{
-          position: 'absolute',
-          width: 300,
-          height: 300,
-          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0) 70%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        }}
-      />
-      <div
-        className="glow-accent bottom-0 right-0"
-        style={{
-          position: 'absolute',
-          width: 300,
-          height: 300,
-          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0) 70%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        }}
-      />
+    <div className="bg-mesh text-on-surface flex flex-col min-h-screen items-center justify-center relative px-6 py-20 font-body-md overflow-hidden">
+      {/* Subtle background movement */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[10%] left-[20%] w-[40rem] h-[40rem] bg-primary/5 rounded-full blur-[120px] animate-subtle-pulse" />
+        <div className="absolute bottom-[10%] right-[10%] w-[30rem] h-[30rem] bg-threat-critical/5 rounded-full blur-[100px] animate-subtle-pulse-reverse" />
+      </div>
 
       {/* Header */}
       <header className="fixed top-0 w-full flex justify-between items-center px-container-margin py-6 z-50">
@@ -244,6 +218,18 @@ export default function Signup() {
           <span className="animate-pulse">_</span>
         </div>
       </footer>
+
+      {/* SVG Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-20">
+        <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect fill="url(#grid)" height="100%" width="100%" />
+        </svg>
+      </div>
     </div>
   )
 }

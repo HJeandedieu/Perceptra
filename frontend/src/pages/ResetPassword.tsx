@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const LOGO_URL =
@@ -7,19 +7,6 @@ const LOGO_URL =
 export default function ResetPassword() {
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const btnRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    const handleMouse = (e: MouseEvent) => {
-      if (!glowRef.current) return
-      const x = (e.clientX / window.innerWidth) * 20 - 10
-      const y = (e.clientY / window.innerHeight) * 20 - 10
-      glowRef.current.style.transform = `translate(${x}px, ${y}px)`
-    }
-    window.addEventListener('mousemove', handleMouse)
-    return () => window.removeEventListener('mousemove', handleMouse)
-  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,48 +19,12 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen relative bg-background text-on-surface overflow-hidden">
-      {/* Ambient glow */}
-      <div
-        ref={glowRef}
-        className="absolute"
-        style={{
-          width: 600,
-          height: 600,
-          borderRadius: '50%',
-          top: -150,
-          left: -150,
-          background: 'radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0) 70%)',
-          filter: 'blur(80px)',
-          zIndex: -1,
-          transition: 'transform 0.1s ease-out',
-        }}
-      />
-      <div
-        className="absolute"
-        style={{
-          width: 600,
-          height: 600,
-          borderRadius: '50%',
-          bottom: -150,
-          right: -150,
-          background: 'radial-gradient(circle, rgba(115, 46, 228, 0.12) 0%, rgba(115, 46, 228, 0) 70%)',
-          filter: 'blur(80px)',
-          zIndex: -1,
-        }}
-      />
-
-      {/* Scanline */}
-      <div
-        className="absolute z-0 pointer-events-none"
-        style={{
-          width: '100%',
-          height: 100,
-          background: 'linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(210,187,255,0.03) 50%, rgba(0,0,0,0) 100%)',
-          opacity: 0.1,
-          animation: 'scanline 8s linear infinite',
-        }}
-      />
+    <div className="bg-mesh text-on-surface flex flex-col min-h-screen items-center justify-center relative overflow-hidden">
+      {/* Subtle background movement */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[10%] left-[20%] w-[40rem] h-[40rem] bg-primary/5 rounded-full blur-[120px] animate-subtle-pulse" />
+        <div className="absolute bottom-[10%] right-[10%] w-[30rem] h-[30rem] bg-threat-critical/5 rounded-full blur-[100px] animate-subtle-pulse-reverse" />
+      </div>
 
       {/* Header */}
       <header className="fixed top-0 w-full flex justify-between items-center px-container-margin py-8 z-50">
@@ -196,7 +147,6 @@ export default function ResetPassword() {
 
             {/* Submit */}
             <button
-              ref={btnRef}
               type="submit"
               disabled={submitting}
               className={`w-full font-headline-md text-headline-md py-4 rounded-lg flex items-center justify-center space-x-2 transition-all cursor-pointer disabled:opacity-70 ${
@@ -244,14 +194,17 @@ export default function ResetPassword() {
         </div>
       </footer>
 
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 pointer-events-none overflow-hidden opacity-30"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+      {/* SVG Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-20">
+        <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect fill="url(#grid)" height="100%" width="100%" />
+        </svg>
+      </div>
     </div>
   )
 }
