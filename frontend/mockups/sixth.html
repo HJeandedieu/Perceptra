@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Verify Identity | Perceptra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#080f14",
+                    "surface-container-high": "#242b31",
+                    "glass-stroke": "rgba(255, 255, 255, 0.12)",
+                    "secondary-fixed": "#dae2fd",
+                    "surface-tint": "#d2bbff",
+                    "on-secondary-container": "#adb4ce",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "glass-surface": "rgba(255, 255, 255, 0.05)",
+                    "tertiary-fixed-dim": "#ffb784",
+                    "inverse-primary": "#732ee4",
+                    "on-primary": "#3f008e",
+                    "threat-medium": "#F59E0B",
+                    "on-primary-fixed": "#25005a",
+                    "threat-low": "#22C55E",
+                    "threat-high": "#EF4444",
+                    "surface": "#0e141a",
+                    "error-container": "#93000a",
+                    "primary-fixed": "#eaddff",
+                    "on-error": "#690005",
+                    "on-surface-variant": "#ccc3d8",
+                    "surface-variant": "#2f353c",
+                    "tertiary-fixed": "#ffdcc6",
+                    "surface-dim": "#0e141a",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#2f353c",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-container": "#1a2026",
+                    "on-tertiary-container": "#ffe0cd",
+                    "tertiary": "#ffb784",
+                    "surface-container-low": "#161c22",
+                    "secondary": "#bec6e0",
+                    "on-secondary-fixed": "#131b2e",
+                    "inverse-on-surface": "#2b3137",
+                    "surface-bright": "#333a40",
+                    "primary-container": "#7c3aed",
+                    "threat-critical": "#7C3AED",
+                    "outline-variant": "#4a4455",
+                    "on-primary-container": "#ede0ff",
+                    "text-body": "#E2E8F0",
+                    "on-tertiary-fixed-variant": "#713700",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#d2bbff",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "inverse-surface": "#dde3eb",
+                    "secondary-container": "#3f465c",
+                    "on-background": "#dde3eb",
+                    "background": "#0e141a",
+                    "tertiary-container": "#a15100",
+                    "primary": "#d2bbff",
+                    "outline": "#958da1",
+                    "on-tertiary": "#4f2500",
+                    "on-secondary": "#283044",
+                    "on-surface": "#dde3eb",
+                    "text-heading": "#FFFFFF"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "glass-padding": "20px",
+                    "container-margin": "32px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-xl": ["Hanken Grotesk"],
+                    "body-md": ["Hanken Grotesk"],
+                    "label-caps": ["Hanken Grotesk"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e141a;
+            font-family: 'Hanken Grotesk', sans-serif;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .otp-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .otp-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #d2bbff;
+            box-shadow: 0 0 15px rgba(210, 187, 255, 0.3);
+            outline: none;
+        }
+
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7c3aed, transparent);
+            position: absolute;
+            width: 100%;
+            top: -2px;
+            animation: scan 4s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #d2bbff;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-on-surface">
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 z-0">
+
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-container-margin py-8 z-50">
+<div class="font-headline-xl text-headline-xl tracking-tighter text-on-surface">Perceptra</div>
+<button class="text-primary hover:opacity-100 transition-opacity opacity-50 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="relative z-10 w-full max-w-lg">
+<div class="glass-card rounded-xl p-glass-padding md:p-10 relative overflow-hidden">
+<div class="scan-line"></div>
+<div class="flex flex-col items-center text-center space-y-6">
+<!-- Branding Icon -->
+<div class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mb-2 shadow-[0_0_20px_rgba(124,58,237,0.4)]">
+<span class="material-symbols-outlined text-4xl text-on-primary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="space-y-2">
+<h1 class="font-headline-lg text-headline-lg text-text-heading">Verify your identity</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm mx-auto">
+                        We've sent a 6-digit code to <span class="text-primary font-medium">n***@perceptra.intel</span>
+</p>
+</div>
+<!-- OTP Input Area -->
+<div class="flex gap-2 md:gap-4 justify-center py-4" id="otp-container">
+<input autocomplete="one-time-code" class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 md:w-16 md:h-20 text-center font-headline-md text-headline-md text-primary rounded-lg" maxlength="1" type="text"/>
+</div>
+<!-- Actions -->
+<div class="w-full space-y-6 pt-4">
+<button class="w-full py-4 bg-primary-container hover:bg-opacity-90 text-on-primary-container font-headline-md text-headline-md rounded-lg transition-all transform active:scale-[0.98] shadow-lg">
+                        Verify &amp; Continue
+                    </button>
+<div class="flex flex-col items-center space-y-2">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">
+                            Didn't receive the code?
+                        </p>
+<button class="font-label-caps text-label-caps text-primary hover:underline underline-offset-4 transition-all">
+                            Resend code
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Security Badge -->
+<div class="mt-8 flex items-center justify-center space-x-2 text-on-surface-variant opacity-40">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="font-label-sm text-label-sm">End-to-End Encrypted Verification Protocol</span>
+</div>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full flex flex-col md:flex-row justify-between items-center px-container-margin py-6 z-50 opacity-60">
+<div class="font-label-caps text-label-caps text-primary">© 2024 Perceptra Obsidian Vigil. Secured by Command Center Protocol.</div>
+<div class="flex space-x-6 mt-4 md:mt-0 font-label-sm text-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors hover:underline underline-offset-4" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors hover:underline underline-offset-4" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors hover:underline underline-offset-4" href="#">System Status</a>
+</div>
+</footer>
+<script>
+        // Auto-focus logic for OTP inputs
+        const inputs = document.querySelectorAll('#otp-container input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Atmospheric Particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 3;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.opacity = Math.random() * 0.5;
+            
+            document.body.appendChild(particle);
+
+            const animation = particle.animate([
+                { transform: 'translate(0, 0)', opacity: particle.style.opacity },
+                { transform: `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px)`, opacity: 0 }
+            ], {
+                duration: 3000 + Math.random() * 5000,
+                easing: 'ease-out'
+            });
+
+            animation.onfinish = () => particle.remove();
+        }
+
+        setInterval(createParticle, 200);
+    </script>
+</body></html>
