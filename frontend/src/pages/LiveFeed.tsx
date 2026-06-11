@@ -1,5 +1,31 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
+import { getEvents, connectDetectionStream } from '../api/events'
+import type { DetectionEvent } from '../api/events'
+
+interface DetectionDisplay {
+  id: string
+  severity: string
+  title: string
+  description: string
+  time: string
+  color: string
+  showActions?: boolean
+}
+
+function formatRelativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  return `${hrs}h ago`
+}
+
+function severityColor(severity: string): string {
+  const map: Record<string, string> = { Low: '#22C55E', Medium: '#F59E0B', High: '#EF4444', Critical: '#7C3AED' }
+  return map[severity] ?? '#7C3AED'
+}
 
 const FEED_SRC_1 =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBwFmHcj1n5D5IQVMoO1TEx2fcwHQ_yo1dch5-KADfJdsdxi59Ktqao11NcIALxfvj3uIoJAPCQEBxcMdkzTL8LCDdY6rORzO6V_kgJbl8kSafHgYcAqAEbeh6ffLkh9TgwP7QBXgGzf6u-9IYU6mkIX7P_Iin36JPOGHeELTrxxx7gqeQ-R60BPFu2NtAfzxVXDNwRSAUB2onDBvBzO8Xr0HDOFx5rOaRF_4GJVKJ5ud1dCwUPfGwHqg9dTV4aiU06fu7AnGwgQBw'
@@ -36,10 +62,55 @@ const feeds: Feed[] = [
 export default function LiveFeed() {
   const [time, setTime] = useState(new Date())
   const [selected, setSelected] = useState<Set<number>>(new Set())
+  const [recentDetections, setRecentDetections] = useState<DetectionDisplay[]>([
+    { id: '1', severity: 'Critical', title: 'Unauthorized Access Attempt', description: 'Main Entrance: Biometric mismatch detected on secondary relay.', time: '2m ago', color: '#7C3AED', showActions: true },
+    { id: '2', severity: 'High', title: 'Motion Detected - South Corridor', description: 'Unexpected kinetic activity during restricted hours.', time: '14m ago', color: '#EF4444' },
+    { id: '3', severity: 'Medium', title: 'Object Left Behind', description: 'Stationary entity detected in Server Room A for &gt; 15 mins.', time: '42m ago', color: '#F59E0B' },
+    { id: '4', severity: 'Low', title: 'Routine Shift Change', description: 'Cleaning crew authorized access to Level B2.', time: '1h ago', color: '#22C55E' },
+  ])
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(interval)
+  }, [])
+
+  // Fetch recent detections from API + connect WebSocket
+  useEffect(() => {
+    let cleanup: (() => void) | undefined
+
+    getEvents({ limit: 5 })
+      .then((res) => {
+        if (res.events.length > 0) {
+          setRecentDetections(res.events.map((e) => ({
+            id: e.id,
+            severity: e.severity,
+            title: e.label,
+            description: `Camera ${e.camera_id}: ${e.label} (${(e.confidence * 100).toFixed(0)}% confidence)`,
+            time: formatRelativeTime(e.timestamp),
+            color: severityColor(e.severity),
+            showActions: e.severity === 'Critical' || e.severity === 'High',
+          })))
+        }
+      })
+      .catch(() => { /* fallback to static data */ })
+
+    // Connect WebSocket for real-time push
+    cleanup = connectDetectionStream((event) => {
+      setRecentDetections((prev) => [
+        {
+          id: event.id,
+          severity: event.severity,
+          title: event.label,
+          description: `Camera ${event.camera_id}: confidence ${(event.confidence * 100).toFixed(0)}%`,
+          time: 'Just now',
+          color: severityColor(event.severity),
+          showActions: event.severity === 'Critical' || event.severity === 'High',
+        },
+        ...prev.slice(0, 9),
+      ])
+    })
+
+    return () => cleanup?.()
   }, [])
 
   const toggleSelect = (id: number) => {
@@ -179,46 +250,29 @@ export default function LiveFeed() {
               <span className="font-label-sm text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full">REAL-TIME</span>
             </div>
             <div className="flex-grow space-y-4 overflow-y-auto custom-scrollbar pr-2">
-              {/* Event 1 */}
-              <div className="p-3 border-l-2 border-threat-critical bg-white/5 rounded-r-lg group hover:bg-white/10 transition-colors cursor-pointer">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="font-label-caps text-[10px] text-threat-critical">CRITICAL</span>
-                  <span className="text-[10px] text-on-surface-variant">2m ago</span>
+              {recentDetections.map((evt) => (
+                <div
+                  key={evt.id}
+                  className="p-3 border-l-2 rounded-r-lg group hover:bg-white/10 transition-colors cursor-pointer"
+                  style={{
+                    borderLeftColor: evt.color,
+                    backgroundColor: 'rgba(255,255,255,0.03)',
+                  }}
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="font-label-caps text-[10px] font-bold" style={{ color: evt.color }}>{evt.severity}</span>
+                    <span className="text-[10px] text-on-surface-variant">{evt.time}</span>
+                  </div>
+                  <p className="text-sm font-semibold text-text-heading mb-1">{evt.title}</p>
+                  <p className="text-xs text-on-surface-variant leading-tight">{evt.description}</p>
+                  {evt.showActions && (
+                    <div className="mt-2 flex gap-2">
+                      <button className="text-[10px] bg-primary/20 hover:bg-primary/40 text-primary px-2 py-0.5 rounded transition-colors cursor-pointer">ISOLATE</button>
+                      <button className="text-[10px] bg-white/10 hover:bg-white/20 text-white px-2 py-0.5 rounded transition-colors cursor-pointer">DISMISS</button>
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm font-semibold text-text-heading mb-1">Unauthorized Access Attempt</p>
-                <p className="text-xs text-on-surface-variant leading-tight">Main Entrance: Biometric mismatch detected on secondary relay.</p>
-                <div className="mt-2 flex gap-2">
-                  <button className="text-[10px] bg-primary/20 hover:bg-primary/40 text-primary px-2 py-0.5 rounded transition-colors cursor-pointer">ISOLATE</button>
-                  <button className="text-[10px] bg-white/10 hover:bg-white/20 text-white px-2 py-0.5 rounded transition-colors cursor-pointer">DISMISS</button>
-                </div>
-              </div>
-              {/* Event 2 */}
-              <div className="p-3 border-l-2 border-threat-high bg-white/5 rounded-r-lg group hover:bg-white/10 transition-colors cursor-pointer">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="font-label-caps text-[10px] text-threat-high">HIGH</span>
-                  <span className="text-[10px] text-on-surface-variant">14m ago</span>
-                </div>
-                <p className="text-sm font-semibold text-text-heading mb-1">Motion Detected - South Corridor</p>
-                <p className="text-xs text-on-surface-variant leading-tight">Unexpected kinetic activity during restricted hours.</p>
-              </div>
-              {/* Event 3 */}
-              <div className="p-3 border-l-2 border-threat-medium bg-white/5 rounded-r-lg group hover:bg-white/10 transition-colors cursor-pointer">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="font-label-caps text-[10px] text-threat-medium">MEDIUM</span>
-                  <span className="text-[10px] text-on-surface-variant">42m ago</span>
-                </div>
-                <p className="text-sm font-semibold text-text-heading mb-1">Object Left Behind</p>
-                <p className="text-xs text-on-surface-variant leading-tight">Stationary entity detected in Server Room A for &gt; 15 mins.</p>
-              </div>
-              {/* Event 4 */}
-              <div className="p-3 border-l-2 border-threat-low bg-white/5 rounded-r-lg group hover:bg-white/10 transition-colors cursor-pointer">
-                <div className="flex justify-between items-start mb-1">
-                  <span className="font-label-caps text-[10px] text-threat-low">LOW</span>
-                  <span className="text-[10px] text-on-surface-variant">1h ago</span>
-                </div>
-                <p className="text-sm font-semibold text-text-heading mb-1">Routine Shift Change</p>
-                <p className="text-xs text-on-surface-variant leading-tight">Cleaning crew authorized access to Level B2.</p>
-              </div>
+              ))}
             </div>
             <div className="mt-4 pt-4 border-t border-glass-stroke">
               <button className="w-full py-2 bg-glass-surface hover:bg-glass-stroke border border-glass-stroke rounded-lg font-label-caps text-label-caps text-primary transition-all cursor-pointer">

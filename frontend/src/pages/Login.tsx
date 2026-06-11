@@ -8,6 +8,7 @@ const LOGO_URL =
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('niel@perceptra.intel')
+  const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const { isAuthenticated, login } = useAuth()
 
@@ -16,9 +17,9 @@ export default function Login() {
     return <Navigate to="/live-feed" replace />
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    login(email)
+    await login(email, password)
     navigate('/live-feed')
   }
 
@@ -90,7 +91,9 @@ export default function Login() {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  defaultValue="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your security key"
                   className="w-full bg-surface-container/30 border border-glass-stroke rounded-lg py-3 pl-12 pr-12 text-text-body font-body-md focus:ring-0 focus:border-primary/40 placeholder:text-outline/50 transition-all backdrop-blur-sm outline-none"
                   onFocus={(e) => (e.currentTarget.parentElement!.style.transform = 'scale(1.01)')}
                   onBlur={(e) => (e.currentTarget.parentElement!.style.transform = 'scale(1)')}
