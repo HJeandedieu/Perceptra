@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perceptra | Unforgettable Threat Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#002113",
+                        "primary-container": "#7c3aed",
+                        "on-tertiary": "#003824",
+                        "primary-fixed": "#eaddff",
+                        "on-error-container": "#ffdad6",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-fixed": "#2c0051",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#5a00c6",
+                        "surface-container-low": "#131b2e",
+                        "surface-tint": "#d2bbff",
+                        "surface-container-high": "#222a3d",
+                        "inverse-on-surface": "#283044",
+                        "on-primary-container": "#ede0ff",
+                        "on-secondary-fixed-variant": "#62259b",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#d1a1ff",
+                        "outline": "#958da1",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "tertiary": "#4edea3",
+                        "secondary-fixed": "#f0dbff",
+                        "surface-container-lowest": "#060e20",
+                        "surface-container": "#171f33",
+                        "surface-container-highest": "#2d3449",
+                        "primary-fixed-dim": "#d2bbff",
+                        "secondary-container": "#62259b",
+                        "on-surface": "#dae2fd",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-tertiary-container": "#76ffc2",
+                        "on-secondary": "#490081",
+                        "on-background": "#dae2fd",
+                        "inverse-primary": "#732ee4",
+                        "primary": "#d2bbff",
+                        "secondary-fixed-dim": "#ddb8ff",
+                        "secondary": "#ddb8ff",
+                        "tertiary-container": "#007650",
+                        "surface-bright": "#31394d",
+                        "inverse-surface": "#dae2fd",
+                        "surface-variant": "#2d3449",
+                        "surface": "#0b1326",
+                        "background": "#0b1326",
+                        "on-surface-variant": "#ccc3d8",
+                        "on-primary": "#3f008e",
+                        "on-primary-fixed": "#25005a",
+                        "outline-variant": "#4a4455"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "0.5rem",
+                        "stack-md": "1.5rem",
+                        "section-padding": "8rem",
+                        "stack-lg": "3rem",
+                        "container-max": "1440px",
+                        "gutter": "2rem"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-mono": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-xl-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #020617; /* Deep Obsidian */
+            color: #dae2fd;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-nav {
+            background: rgba(11, 19, 38, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+        }
+        .button-glow:hover {
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
+        }
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-transparent backdrop-blur-md">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<img alt="Perceptra" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLvIwfwhOrhaPU06b2fqE5zcqwt-2Hji0GL1dreeIQJfKNkRa1hDroUmKGVzs7VYNLPQA5R7T_CzSQc5yl7ydS7sRgtbqvRg0s0IY1MZ1zWDjx5mi7c1x4Q3raCbA9tvIh4Ir6Yd86Fo7uDdyrVh5uF4BHN_Nuj6RkeiVzVSMC4zGf4PQjgBDDlzrmGOvVEbJjAEkZC6uJB9wZvETKba9M2EncDsrwOIBxFyxLLLS1s17EcTMrOvW-08AgQ"/>
+<span class="font-display-xl-mobile text-display-xl-mobile font-bold text-on-surface tracking-tight">Perceptra</span>
+</div>
+<nav class="hidden md:flex items-center gap-8 glass-nav px-8 py-2.5 rounded-full">
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Platform</a>
+<a class="text-on-surface/70 font-medium hover:text-primary transition-colors duration-300 font-body-md text-body-md" href="#">Solutions</a>
+<a class="text-on-surface/70 font-medium hover:text-primary transition-colors duration-300 font-body-md text-body-md" href="#">Intelligence</a>
+<a class="text-on-surface/70 font-medium hover:text-primary transition-colors duration-300 font-body-md text-body-md" href="#">Resources</a>
+</nav>
+<div class="flex items-center gap-4">
+<a class="hidden sm:block text-on-surface/70 font-medium hover:text-primary transition-colors font-body-md" href="#">Login</a>
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-full font-semibold hover:scale-105 transition-all duration-300 button-glow flex items-center gap-2">
+                    Get Started
+                    <span class="material-symbols-outlined text-[18px]">arrow_outward</span>
+</button>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-24 overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0 hero-mask">
+<div class="absolute inset-0 bg-gradient-to-b from-surface/40 via-surface/60 to-background"></div>
+<img class="w-full h-full object-cover opacity-60" data-alt="A futuristic high-tech command center in a deep obsidian vault. Multiple floating digital screens show complex data streams and global map visualizations in vibrant purple and neon cyan. The room is dimly lit, emphasizing the bioluminescent glow of the threat intelligence interfaces, creating an atmosphere of omniscient security and technical mastery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2UT4sOxiDyPptVMJCarqABUra33UOQKA1YTDPYpMr-3PjlVhczyoZzYwS_s8jOFau9lqj0HU_zkNQXx2ey-rCCys3Hq1ORPMm1zAxBcqifOX5bSsbnO25Cwu8n_g4ubc8oCsCmdNYMh1HZGc00GDiNdWJyqSIgxkKbcZgbZXJvTKJ-vTGJ2V0gA7IoGfjlVMQqBjcKmdrEDgUPAe2NaywOCmDTHVztuwC5V7yQWt7PDh9EQSo3dSmut2UdFf-QTxWjx1DtxQax-g"/>
+</div>
+<!-- Content Container -->
+<div class="relative z-10 max-w-container-max mx-auto px-gutter w-full">
+<div class="max-w-4xl">
+<div class="inline-flex items-center gap-2 px-4 py-1 rounded-full glass-card border-primary/20 mb-8 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#7c3aed]"></span>
+<span class="font-label-mono text-label-mono text-primary uppercase tracking-widest">YOLOv8 Vision Engine Active</span>
+</div>
+<h1 class="font-display-xl text-display-xl-mobile md:text-display-xl mb-6 leading-tight tracking-tighter text-glow">
+                        Unforgettable Threat Intelligence.<br/>
+<span class="text-primary">Real-Time Perception.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12">
+                        Deploy the world's most advanced vision-based security infrastructure. Perceptra leverages real-time YOLOv8 neural networks to identify, track, and neutralize threats before they manifest.
+                    </p>
+<div class="flex flex-wrap gap-6 items-center">
+<button class="bg-primary-container text-on-primary-container px-10 py-4 rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 shadow-2xl shadow-primary/20">
+                            Get Started
+                        </button>
+<button class="glass-card px-10 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all duration-300 flex items-center gap-3">
+<span class="material-symbols-outlined">play_circle</span>
+                            Watch Demo
+                        </button>
+</div>
+</div>
+<!-- Trust Panel (Social Proof) -->
+<div class="mt-24 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+<div class="glass-card p-6 rounded-2xl flex items-center gap-6 group hover:border-primary/50 transition-colors">
+<div class="flex -space-x-4">
+<img class="w-12 h-12 rounded-full border-2 border-surface object-cover" data-alt="Close up portrait of a professional technology executive in a dark office, soft purple lighting reflecting off glasses." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb4-vfeNGk43Qq-nuJGttE7Mor59c4nJFeEv5iffRFDlIYhiPnE1wtO_1W-LhNmY4HFDl30PbQ9YYc_418MNvOtfD_DUPfzvdCAPBJR-i5mBV5gBVO4111cVxcm-op-BsHQZ4rzUbkt-B-Uuoe054rbmQJYkI_zxG1hPBrxtJfhsEjPNztAwVaUY0uje0pYNbjFmJ7qu98g8_rnq3o16b_VtdCZ-tATyRuVFsNg2tZTmKZRQ7wpipnB7N0o5_CzGQ-CUMX9fHTy90"/>
+<img class="w-12 h-12 rounded-full border-2 border-surface object-cover" data-alt="Portrait of a female cybersecurity engineer with a focused expression, high-tech background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7kHOFK7BMurgP5vnxLYPRIFlhGEKy1DdAOArp9vM5b_DfaVEM2DkS7qOCDOsPuXhxQ5LsvBYlzgyHa0CGw-zF6e5-PnqUswG9OCel5zEa8zq4zQrSu7EjQ_J27NLzZJe6Lf9HlbyM0_k6gScV0dFnyTTP7wHAUeH3Iqz3h3FQorPu6PMBvSq4RyVQ3nmxWSG63OFL_JFLBBk_EIm86BYOI-rgImGuBLKjLV79jto3kLBBZ9A2iVwAcVn3nXcBotK-ono8iu8ga5Y"/>
+<img class="w-12 h-12 rounded-full border-2 border-surface object-cover" data-alt="Portrait of a confident IT manager in a modern tech hub, subtle atmospheric depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbz46MGmquXZUeCj9WCEINKvLx9ZQDgL7xAwkr-eC8gndMl_u69dMXA2LQAco6Z4crSf1b4BJ-Z56ZxTuo9klPguPz2cOhK8mU3njYFcBdhg82sSd6SOx7WG4pVrnqjJvF6jmTQZcLBhk6_3uL9P90SjAGodY31sMRWvzaTEwSU86vlPnqaGj1EiHalAlpnbG55HDiabfVY5E_vVIxQ376nGQu_sQcsW3Pho-BQVRmuwpvFYpRKdlbEONpe7cRBR6mebtqBi9hYuE"/>
+<div class="w-12 h-12 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center text-xs font-bold">+500</div>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-primary leading-none">500+</div>
+<div class="text-on-surface/60 font-medium">Nodes Secured Worldwide</div>
+</div>
+</div>
+<div class="glass-card p-6 rounded-2xl flex items-center gap-6 group hover:border-primary/50 transition-colors">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-primary leading-none">99.9%</div>
+<div class="text-on-surface/60 font-medium">Detection Accuracy</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-section-padding px-gutter max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+<div class="max-w-2xl">
+<span class="font-label-mono text-label-mono text-primary uppercase tracking-[0.2em] mb-4 block">Core Capabilities</span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg leading-tight">Advanced Perception Powered by YOLOv8 Intelligence</h2>
+</div>
+<div class="pb-2">
+<a class="text-primary font-semibold flex items-center gap-2 group" href="#">
+                        Explore Full Architecture
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Live Feed Oversight -->
+<div class="group relative overflow-hidden rounded-3xl glass-card flex flex-col h-[500px] transition-all duration-500 hover:-translate-y-2">
+<div class="h-3/5 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" data-alt="A split-screen security camera grid monitor displaying multiple urban environments at night. Each screen has digital overlays with green and purple bounding boxes around moving vehicles and pedestrians, signifying active object detection in a dark mode tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQNZnDAJ9JyFoX6BBvW8J4LVj_tkxe5kdZ5Er8WZLCzXdH6n3B-yx03z7KcCPY7FXf8e4L57VQeiz23Mha2Ny6934fkF0lxDQlsw02uTPjddZ5pMvp7VeQyKy-KjJWwqUGQAcIhj9-ZJ2vjaz8X0NXXd5Y1_PUqyh_VDw4krQWPJg-ViQdRTJibFF6Z4RekZU0AoCyKAw5ku0nTGtp2iqysG8dsLGLTAC-rWOmJNTA8gPg3tMCWj0fGDB8eQ2GHQ8R60WwvCH0Aig"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+</div>
+<div class="p-8 flex flex-col justify-end flex-grow">
+<div class="mb-4 text-primary bg-primary/10 w-fit p-3 rounded-xl">
+<span class="material-symbols-outlined text-3xl">visibility</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Live Feed Oversight</h3>
+<p class="text-on-surface-variant font-body-md">Omniscient monitoring across distributed camera arrays with unified latency control.</p>
+</div>
+</div>
+<!-- AI Inference Engine -->
+<div class="group relative overflow-hidden rounded-3xl glass-card flex flex-col h-[500px] transition-all duration-500 hover:-translate-y-2">
+<div class="h-3/5 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" data-alt="A stylized 3D visualization of a neural network processing layers of data. Prismatic light paths and glowing nodes represent the YOLOv8 AI engine. The background is a deep obsidian void with floating particles, creating a sense of immense processing power and computational speed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbXkZf8oZuirFz6OF7NYsU-s4pIqSDSw7toN6iekKSsRzDYpMda-MUdus_A4EJNy6z-yK-lFQGpLisM4BOdQNaKZ1r5MBoJO4DH6frjZrnBeJCc5XErRRG2q6ICHQ0Y_CzMBIBO9M4OP2v3riDsSWsCg6nTQoQrzYLYAIXiYqDeVhq2WdA1OMPT4nwHFW7ymOhjbBiGfk5pRZkplcYzChPGdPBnbgEFHUff_m_c20_yyMg4HAy_tzjcXQv56_xstxz_ndU1OXMDJQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+</div>
+<div class="p-8 flex flex-col justify-end flex-grow">
+<div class="mb-4 text-primary bg-primary/10 w-fit p-3 rounded-xl">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">AI Inference Engine</h3>
+<p class="text-on-surface-variant font-body-md">Edge-optimized YOLOv8 models providing sub-millisecond object detection in every frame.</p>
+</div>
+</div>
+<!-- Integrated Alerts -->
+<div class="group relative overflow-hidden rounded-3xl glass-card flex flex-col h-[500px] transition-all duration-500 hover:-translate-y-2">
+<div class="h-3/5 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" data-alt="A smartphone lying on a dark, reflective desk showing a sequence of urgent security alert notifications. The screen glow illuminates the obsidian surface with a radioactive purple light. The mood is tense and high-stakes, emphasizing the speed and reliability of the alerting system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNSJXLCm2bXRfVaNPg8iLfYyZsWIJLVmhUdmv-1lDOQSxSDySOSxShoOQ9Qxq07a67fMiMVlXKYY3LFZCVXg3jJ4-R0BEp4w6X1hwc_e7eDvaYvY8zkqcT6k2zVIgNZc8vWNId4D6UKCxb5YD61CbsU00y5wR8A-EK-KpD9HwjT2S5YKTqZQ_9vea1BQKprG3ZRKFAXAysdGS4Wk4ntzGv47vuweaTv6rAUWJp3hvfgyTsYlKt_3VJdKklwb4RkENLmAhEVs8RmPo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+</div>
+<div class="p-8 flex flex-col justify-end flex-grow">
+<div class="mb-4 text-primary bg-primary/10 w-fit p-3 rounded-xl">
+<span class="material-symbols-outlined text-3xl">notification_important</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Integrated Alerts</h3>
+<p class="text-on-surface-variant font-body-md">Instant SMS, Email, and Push notifications triggered by custom anomalous behavior detection.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Dynamic Visualization (Atmospheric) -->
+<section class="relative py-section-padding overflow-hidden">
+<div class="absolute inset-0 opacity-20">
+<!-- Using a subtle placeholder for tech background -->
+<div class="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent"></div>
+</div>
+<div class="relative max-w-container-max mx-auto px-gutter text-center">
+<h2 class="font-display-xl text-display-xl-mobile md:text-headline-lg mb-8 max-w-4xl mx-auto">See the world through the eyes of Perceptra.</h2>
+<div class="glass-card aspect-video max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-primary/10 border-white/20 p-1">
+<img class="w-full h-full object-cover rounded-2xl" data-alt="A panoramic digital view of a city at night with an advanced AI overlay. Floating metadata tags, heatmaps, and threat probability indicators are layered over the streets. The visual style is cinematic and clinical, with a high-contrast purple and black palette suggesting a future of total digital awareness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwhPKboX4O_R87pqMSX0JpTFZUNQ52SbIrdqNBwCVohZ8LDi0r-xQ3ukSwPXEd5UI6NJys0NEeguT3hTEUXsnYtNh6P4Utv7vXVReAscPFhQvcaUIOx_qhCv3VrNYEvEuw84W-5tGBaPlB5dHU7Wn7sa-jwfPFsgZMbwp3FdVd1pQkTVFM84f3CkgfWsJpdD6PafPPFXb5bZteM4lAMHbXtXNFKzihCdyriRi4Y_2CAI5hL_MZbSLBh049JWimqYE4rSCpQvpinf4"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-padding bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-lg px-gutter max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<img alt="Perceptra" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLvIwfwhOrhaPU06b2fqE5zcqwt-2Hji0GL1dreeIQJfKNkRa1hDroUmKGVzs7VYNLPQA5R7T_CzSQc5yl7ydS7sRgtbqvRg0s0IY1MZ1zWDjx5mi7c1x4Q3raCbA9tvIh4Ir6Yd86Fo7uDdyrVh5uF4BHN_Nuj6RkeiVzVSMC4zGf4PQjgBDDlzrmGOvVEbJjAEkZC6uJB9wZvETKba9M2EncDsrwOIBxFyxLLLS1s17EcTMrOvW-08AgQ"/>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Perceptra</span>
+</div>
+<p class="text-on-surface-variant font-body-md mb-6 pr-8">
+                    The sentinel of the digital age. Advanced threat intelligence powered by deep neural networks.
+                </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md font-bold text-on-surface mb-6">Product</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">API Reference</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Integrations</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md font-bold text-on-surface mb-6">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Team</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md font-bold text-on-surface mb-6">Intelligence</h4>
+<div class="glass-card p-6 rounded-2xl">
+<p class="text-on-surface-variant text-sm mb-4">Stay updated on the latest global threat landscape.</p>
+<div class="flex">
+<input class="bg-surface border-outline-variant rounded-l-xl w-full focus:border-primary focus:ring-0 text-sm" placeholder="Email address" type="email"/>
+<button class="bg-primary-container text-on-primary-container px-4 rounded-r-xl hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter mt-16 pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant text-sm">© 2024 Perceptra Threat Intel. All rights reserved.</p>
+<div class="flex gap-8 text-sm text-on-surface-variant">
+<span>ISO 27001 Certified</span>
+<span>SOC2 Type II</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and parallax scroll effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroImage = document.querySelector('.hero-mask img');
+            if (heroImage) {
+                heroImage.style.transform = `translateY(${scrolled * 0.4}px)`;
+            }
+        });
+
+        // Interactive hover for cards
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

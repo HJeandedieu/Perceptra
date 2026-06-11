@@ -1,0 +1,445 @@
+<!doctype html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Reset Terminal Password | Perceptra</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#080f14",
+              "surface-container-high": "#242b31",
+              "glass-stroke": "rgba(255, 255, 255, 0.12)",
+              "secondary-fixed": "#dae2fd",
+              "surface-tint": "#d2bbff",
+              "on-secondary-container": "#adb4ce",
+              "on-secondary-fixed-variant": "#3f465c",
+              "glass-surface": "rgba(255, 255, 255, 0.05)",
+              "tertiary-fixed-dim": "#ffb784",
+              "inverse-primary": "#732ee4",
+              "on-primary": "#3f008e",
+              "threat-medium": "#F59E0B",
+              "on-primary-fixed": "#25005a",
+              "threat-low": "#22C55E",
+              "threat-high": "#EF4444",
+              surface: "#0e141a",
+              "error-container": "#93000a",
+              "primary-fixed": "#eaddff",
+              "on-error": "#690005",
+              "on-surface-variant": "#ccc3d8",
+              "surface-variant": "#2f353c",
+              "tertiary-fixed": "#ffdcc6",
+              "surface-dim": "#0e141a",
+              "on-error-container": "#ffdad6",
+              "surface-container-highest": "#2f353c",
+              "secondary-fixed-dim": "#bec6e0",
+              "on-tertiary-fixed": "#301400",
+              "surface-container": "#1a2026",
+              "on-tertiary-container": "#ffe0cd",
+              tertiary: "#ffb784",
+              "surface-container-low": "#161c22",
+              secondary: "#bec6e0",
+              "on-secondary-fixed": "#131b2e",
+              "inverse-on-surface": "#2b3137",
+              "surface-bright": "#333a40",
+              "primary-container": "#7c3aed",
+              "threat-critical": "#7C3AED",
+              "outline-variant": "#4a4455",
+              "on-primary-container": "#ede0ff",
+              "text-body": "#E2E8F0",
+              "on-tertiary-fixed-variant": "#713700",
+              error: "#ffb4ab",
+              "primary-fixed-dim": "#d2bbff",
+              "on-primary-fixed-variant": "#5a00c6",
+              "inverse-surface": "#dde3eb",
+              "secondary-container": "#3f465c",
+              "on-background": "#dde3eb",
+              background: "#0e141a",
+              "tertiary-container": "#a15100",
+              primary: "#d2bbff",
+              outline: "#958da1",
+              "on-tertiary": "#4f2500",
+              "on-secondary": "#283044",
+              "on-surface": "#dde3eb",
+              "text-heading": "#FFFFFF",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              gutter: "24px",
+              "glass-padding": "20px",
+              "container-margin": "32px",
+              base: "8px",
+            },
+            fontFamily: {
+              "headline-md": ["Hanken Grotesk"],
+              "headline-xl": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+              "label-caps": ["Hanken Grotesk"],
+              "label-sm": ["Hanken Grotesk"],
+              "headline-lg": ["Hanken Grotesk"],
+              "body-lg": ["Hanken Grotesk"],
+            },
+            fontSize: {
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-xl": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "label-caps": [
+                "12px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.08em",
+                  fontWeight: "700",
+                },
+              ],
+              "label-sm": ["11px", { lineHeight: "14px", fontWeight: "500" }],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "700",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #0e141a;
+        color: #dde3eb;
+        font-family: "Hanken Grotesk", sans-serif;
+        overflow: hidden;
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      }
+
+      .input-glow:focus {
+        outline: none;
+        border-color: #d2bbff;
+        box-shadow: 0 0 15px rgba(210, 187, 255, 0.2);
+      }
+
+      .ambient-glow {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.15) 0%,
+          rgba(124, 58, 237, 0) 70%
+        );
+        filter: blur(80px);
+        z-index: -1;
+      }
+
+      .scanline {
+        width: 100%;
+        height: 100px;
+        z-index: 0;
+        background: linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(210, 187, 255, 0.03) 50%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        opacity: 0.1;
+        position: absolute;
+        bottom: 100%;
+        animation: scanline 8s linear infinite;
+      }
+
+      @keyframes scanline {
+        0% {
+          bottom: 100%;
+        }
+        100% {
+          bottom: -100px;
+        }
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen relative">
+    <!-- Atmospheric Background Elements -->
+    <div class="ambient-glow -top-48 -left-48"></div>
+    <div
+      class="ambient-glow -bottom-48 -right-48"
+      style="
+        background: radial-gradient(
+          circle,
+          rgba(115, 46, 228, 0.12) 0%,
+          rgba(115, 46, 228, 0) 70%
+        );
+      "
+    ></div>
+    <div class="scanline"></div>
+    <!-- Top Bar Navigation (Simplified for Auth Flow) -->
+    <header
+      class="fixed top-0 w-full flex justify-between items-center px-container-margin py-8 z-50"
+    >
+      <div
+        class="font-headline-xl text-headline-xl tracking-tighter text-on-surface"
+      >
+        Perceptra
+      </div>
+      <div class="flex items-center space-x-6">
+        <span
+          class="material-symbols-outlined text-on-surface-variant opacity-50 cursor-pointer hover:opacity-100 transition-opacity"
+          data-icon="help_outline"
+          >help_outline</span
+        >
+      </div>
+    </header>
+    <!-- Main Content: Reset Password Terminal -->
+    <main class="w-full max-w-[480px] px-6 relative z-10">
+      <div
+        class="glass-card rounded-xl p-glass-padding md:p-8 space-y-8 animate-in fade-in zoom-in duration-700"
+      >
+        <!-- Header Section -->
+        <div class="text-center space-y-2">
+          <div class="flex justify-center mb-4">
+            <div
+              class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/20"
+            >
+              <span
+                class="material-symbols-outlined text-primary text-4xl"
+                data-icon="lock_reset"
+                >lock_reset</span
+              >
+            </div>
+          </div>
+          <h1 class="font-headline-lg text-headline-lg text-text-heading">
+            Reset Terminal Password
+          </h1>
+          <p
+            class="font-body-md text-body-md text-on-surface-variant opacity-70"
+          >
+            Execute protocol to re-establish secure access.
+          </p>
+        </div>
+        <!-- Form Section -->
+        <form class="space-y-6" id="resetForm">
+          <!-- Old Password -->
+          <div class="space-y-2">
+            <label
+              class="font-label-caps text-label-caps text-primary block px-1"
+              for="old_password"
+              >Old Password</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-xl"
+                data-icon="key"
+                >key</span
+              >
+              <input
+                class="w-full bg-surface-container-low border border-glass-stroke rounded-lg py-3.5 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/30 input-glow transition-all"
+                id="old_password"
+                placeholder="••••••••"
+                type="password"
+              />
+            </div>
+          </div>
+          <!-- New Password -->
+          <div class="space-y-2">
+            <label
+              class="font-label-caps text-label-caps text-primary block px-1"
+              for="new_password"
+              >New Password</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-xl"
+                data-icon="shield_lock"
+                >shield_lock</span
+              >
+              <input
+                class="w-full bg-surface-container-low border border-glass-stroke rounded-lg py-3.5 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/30 input-glow transition-all"
+                id="new_password"
+                placeholder="••••••••"
+                type="password"
+              />
+            </div>
+            <div class="flex gap-1 mt-2 px-1">
+              <div
+                class="h-1 flex-1 bg-threat-low/20 rounded-full overflow-hidden"
+              >
+                <div class="h-full bg-threat-low w-full"></div>
+              </div>
+              <div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+              <div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+              <div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+            </div>
+          </div>
+          <!-- Confirm Password -->
+          <div class="space-y-2">
+            <label
+              class="font-label-caps text-label-caps text-primary block px-1"
+              for="confirm_password"
+              >Confirm New Password</label
+            >
+            <div class="relative">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-xl"
+                data-icon="verified_user"
+                >verified_user</span
+              >
+              <input
+                class="w-full bg-surface-container-low border border-glass-stroke rounded-lg py-3.5 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/30 input-glow transition-all"
+                id="confirm_password"
+                placeholder="••••••••"
+                type="password"
+              />
+            </div>
+          </div>
+          <!-- Primary Action -->
+          <button
+            class="w-full bg-primary-container text-on-primary-container font-headline-md text-headline-md py-4 rounded-lg flex items-center justify-center space-x-2 active:scale-95 transition-transform hover:brightness-110 shadow-lg shadow-primary-container/20 group"
+            type="submit"
+          >
+            <span
+              class="material-symbols-outlined group-hover:rotate-12 transition-transform"
+              data-icon="security"
+              >security</span
+            >
+            <span>Update Password</span>
+          </button>
+        </form>
+        <!-- Secondary Links -->
+        <div class="pt-2 text-center">
+          <a
+            class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center gap-1 group"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform"
+              data-icon="arrow_back"
+              >arrow_back</span
+            >
+            Return to Mission Hub
+          </a>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="fixed bottom-0 w-full flex flex-col md:flex-row justify-between items-center px-container-margin py-6 opacity-60 z-50"
+    >
+      <div class="font-label-caps text-label-caps text-primary">
+        © 2024 Perceptra Obsidian Vigil. Secured by Command Center Protocol.
+      </div>
+      <div
+        class="flex gap-6 mt-4 md:mt-0 font-label-sm text-label-sm text-on-surface-variant"
+      >
+        <a
+          class="hover:text-primary transition-colors underline-offset-4 hover:underline"
+          href="#"
+          >Privacy Policy</a
+        >
+        <a
+          class="hover:text-primary transition-colors underline-offset-4 hover:underline"
+          href="#"
+          >Terms of Service</a
+        >
+        <a
+          class="hover:text-primary transition-colors underline-offset-4 hover:underline"
+          href="#"
+          >System Status</a
+        >
+      </div>
+    </footer>
+    <!-- Background Decoration -->
+    <div
+      class="absolute inset-0 pointer-events-none overflow-hidden opacity-30"
+    >
+      <!-- Digital Grid Texture using CSS Patterns -->
+      <div
+        class="absolute inset-0"
+        style="
+          background-image: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          );
+          background-size: 40px 40px;
+        "
+      ></div>
+    </div>
+    <script>
+      // Micro-interactions for form submission
+      document
+        .getElementById("resetForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const btn = e.target.querySelector("button");
+          const originalContent = btn.innerHTML;
+
+          // Visual feedback
+          btn.disabled = true;
+          btn.innerHTML =
+            '<span class="material-symbols-outlined animate-spin" data-icon="sync">sync</span> <span>Syncing...</span>';
+
+          setTimeout(() => {
+            btn.classList.replace("bg-primary-container", "bg-threat-low");
+            btn.innerHTML =
+              '<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> <span>Protocol Confirmed</span>';
+
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.classList.replace("bg-threat-low", "bg-primary-container");
+              btn.innerHTML = originalContent;
+            }, 2000);
+          }, 1500);
+        });
+
+      // Ambient Cursor Glow Effect
+      document.addEventListener("mousemove", (e) => {
+        const glow = document.querySelector(".ambient-glow:first-child");
+        const x = (e.clientX / window.innerWidth) * 20 - 10;
+        const y = (e.clientY / window.innerHeight) * 20 - 10;
+        glow.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    </script>
+  </body>
+</html>
