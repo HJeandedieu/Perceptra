@@ -17,3 +17,6 @@ torchvision>=0.21.0
 
 # Testing
 pytest==8.2.0
+
+deepface==0.0.93
+tensorflow-cpu==2.16.1
