@@ -10,11 +10,9 @@ const navItems = [
 ]
 
 const PERCEPTRA_LOGO =
-  'https://lh3.googleusercontent.com/aida/AP1WRLvIwfwhOrhaPU06b2fqE5zcqwt-2Hji0GL1dreeIQJfKNkRa1hDroUmKGVzs7VYNLPQA5R7T_CzSQc5yl7ydS7sRgtbqvRg0s0IY1MZ1zWDjx5mi7c1x4Q3raCbA9tvIh4Ir6Yd86Fo7uDdyrVh5uF4BHN_Nuj6RkeiVzVSMC4zGf4PQjgBDDlzrmGOvVEbJjAEkZC6uJB9wZvETKba9M2EncDsrwOIBxFyxLLLS1s17EcTMrOvW-08AgQ'
-
+'../../public/favicon.svg'
 const DEFAULT_AVATAR =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuC8nqhkBo-kDEfQ51QolrcaV6ZiO8rV7C5vj3sKSkpqNuG45REVmd2teQ9XvQkPUTZF_bhC-3W1KraLbt4GOUZ6bgbEcASdw5dxG4ziJtSZTG4Q9YpyNzeDOyBCdY7sxYJIbJ6zgq9EhcQvCIIO9VPVYctXhYyteaj7lt1ouzsvlsg01PBHr1wN5JBknULFEBwD7ipmH0NfyJENg-g310pm5Rbt1YDlLNzQD6vk60dqfaTPJjOqGAHmtDmV5jvVVj9qu_PDjfLpFRo'
-
+'../../public/favicon.svg'
 export default function Sidebar() {
   const location  = useLocation()
   const navigate  = useNavigate()
