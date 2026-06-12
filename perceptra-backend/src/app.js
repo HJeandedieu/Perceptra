@@ -1,6 +1,7 @@
 // src/app.js
 import express from 'express';
 import cors from 'cors';
+import config from './config/config.js';
 import authRoutes    from './routes/auth.routes.js';
 import eventsRoutes  from './routes/events.routes.js';
 import personsRoutes from './routes/persons.routes.js';
@@ -15,7 +16,7 @@ const app = express();
 // ------------------------------------------------------------------
 // Middleware
 // ------------------------------------------------------------------
-app.use(cors());
+app.use(cors({ origin: config.clientUrl }));
 app.use(express.json({ limit: '10mb' })); // 10mb for base64 face images
 app.use(express.urlencoded({ extended: true }));
 
