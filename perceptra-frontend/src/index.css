@@ -1,0 +1,432 @@
+@import "tailwindcss";
+/* ── Google Fonts ── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+
+
+/* ===== Perceptra Design System — Enterprise Light Theme ===== */
+@theme {
+  /* ── Background & Surface ── */
+  --color-background:               #F8F8F6;
+  --color-surface:                  #FFFFFF;
+  --color-surface-raised:           #FFFFFF;
+  --color-surface-sunken:           #F3F4F6;
+  --color-surface-overlay:          #FFFFFF;
+
+  /* ── Text ── */
+  --color-text-primary:             #1E1E1E;
+  --color-text-secondary:           #6B7280;
+  --color-text-disabled:            #9CA3AF;
+  --color-text-inverse:             #FFFFFF;
+  --color-text-heading:             #1E1E1E;
+  --color-text-body:                #374151;
+
+  /* ── Borders ── */
+  --color-border:                   #E5E7EB;
+  --color-border-strong:            #D1D5DB;
+  --color-border-focus:             #D4A017;
+
+  /* ── Accent Gold ── */
+  --color-accent:                   #D4A017;
+  --color-accent-hover:             #B88A12;
+  --color-accent-subtle:            #FEF3C7;
+  --color-accent-border:            #FCD34D;
+
+  /* ── Threat Severity ── */
+  --color-threat-low:               #9CA3AF;
+  --color-threat-medium:            #FACC15;
+  --color-threat-high:              #F97316;
+  --color-threat-critical:          #DC2626;
+
+  --color-threat-low-bg:            #F9FAFB;
+  --color-threat-medium-bg:         #FEFCE8;
+  --color-threat-high-bg:           #FFF7ED;
+  --color-threat-critical-bg:       #FEF2F2;
+
+  --color-threat-low-border:        #E5E7EB;
+  --color-threat-medium-border:     #FDE68A;
+  --color-threat-high-border:       #FDBA74;
+  --color-threat-critical-border:   #FECACA;
+
+  /* ── Status ── */
+  --color-success:                  #10B981;
+  --color-success-bg:               #ECFDF5;
+  --color-success-border:           #A7F3D0;
+
+  --color-warning:                  #FACC15;
+  --color-warning-bg:               #FEFCE8;
+  --color-warning-border:           #FDE68A;
+
+  --color-error:                    #DC2626;
+  --color-error-bg:                 #FEF2F2;
+  --color-error-border:             #FECACA;
+
+  --color-info:                     #3B82F6;
+  --color-info-bg:                  #EFF6FF;
+  --color-info-border:              #BFDBFE;
+
+  /* ── Navigation ── */
+  --color-nav-bg:                   #FFFFFF;
+  --color-nav-active-bg:            #FEF3C7;
+  --color-nav-active-text:          #92400E;
+  --color-nav-hover-bg:             #F9FAFB;
+
+  /* ── Legacy token aliases (keeps existing component references working) ── */
+  --color-primary:                  #D4A017;
+  --color-primary-container:        #FEF3C7;
+  --color-on-primary:               #FFFFFF;
+  --color-on-primary-container:     #78350F;
+  --color-inverse-primary:          #B88A12;
+  --color-secondary:                #6B7280;
+  --color-secondary-container:      #F3F4F6;
+  --color-on-secondary:             #FFFFFF;
+  --color-on-secondary-container:   #374151;
+  --color-surface-container:        #F9FAFB;
+  --color-surface-container-low:    #F3F4F6;
+  --color-surface-container-high:   #FFFFFF;
+  --color-surface-container-highest:#FFFFFF;
+  --color-surface-variant:          #F3F4F6;
+  --color-on-surface:               #1E1E1E;
+  --color-on-surface-variant:       #6B7280;
+  --color-on-background:            #1E1E1E;
+  --color-outline:                  #E5E7EB;
+  --color-outline-variant:          #D1D5DB;
+  --color-glass-surface:            rgba(255, 255, 255, 0.9);
+  --color-glass-stroke:             #E5E7EB;
+  --color-inverse-on-surface:       #FFFFFF;
+  --color-inverse-surface:          #1E1E1E;
+  --color-error-container:          #FEF2F2;
+  --color-on-error:                 #FFFFFF;
+  --color-on-error-container:       #DC2626;
+  --color-surface-dim:              #F3F4F6;
+  --color-surface-bright:           #FFFFFF;
+  --color-surface-tint:             #D4A017;
+  --color-tertiary:                 #F97316;
+  --color-tertiary-container:       #FFF7ED;
+  --color-on-tertiary:              #FFFFFF;
+  --color-on-tertiary-container:    #C2410C;
+
+  /* ── Spacing ── */
+  --spacing-gutter:                 24px;
+  --spacing-container-margin:       32px;
+  --spacing-base:                   8px;
+  --spacing-stack-sm:               0.5rem;
+  --spacing-stack-md:               1.5rem;
+  --spacing-stack-lg:               3rem;
+  --spacing-section-padding:        6rem;
+  --spacing-container-max:          1440px;
+
+  /* ── Font Families ── */
+  --font-headline-xl:               "Inter", sans-serif;
+  --font-headline-lg:               "Inter", sans-serif;
+  --font-headline-md:               "Inter", sans-serif;
+  --font-body-md:                   "Inter", sans-serif;
+  --font-body-lg:                   "Inter", sans-serif;
+  --font-label-caps:                "Inter", sans-serif;
+  --font-label-sm:                  "Inter", sans-serif;
+  --font-display-xl:                "Inter", sans-serif;
+  --font-display-xl-mobile:         "Inter", sans-serif;
+  --font-body-inter:                "Inter", sans-serif;
+  --font-label-mono:                "JetBrains Mono", monospace;
+
+  /* ── Font Sizes ── */
+  --font-size-headline-xl:          40px;
+  --font-size-headline-xl--line-height: 48px;
+  --font-size-headline-xl--letter-spacing: -0.02em;
+  --font-size-headline-xl--font-weight: 700;
+
+  --font-size-headline-lg:          28px;
+  --font-size-headline-lg--line-height: 36px;
+  --font-size-headline-lg--letter-spacing: -0.01em;
+  --font-size-headline-lg--font-weight: 700;
+
+  --font-size-headline-md:          20px;
+  --font-size-headline-md--line-height: 28px;
+  --font-size-headline-md--font-weight: 600;
+
+  --font-size-body-lg:              17px;
+  --font-size-body-lg--line-height: 26px;
+  --font-size-body-lg--font-weight: 400;
+
+  --font-size-body-md:              15px;
+  --font-size-body-md--line-height: 22px;
+  --font-size-body-md--font-weight: 400;
+
+  --font-size-label-caps:           11px;
+  --font-size-label-caps--line-height: 16px;
+  --font-size-label-caps--letter-spacing: 0.08em;
+  --font-size-label-caps--font-weight: 600;
+
+  --font-size-label-sm:             12px;
+  --font-size-label-sm--line-height: 16px;
+  --font-size-label-sm--font-weight: 500;
+
+  --font-size-display-xl:           56px;
+  --font-size-display-xl--line-height: 64px;
+  --font-size-display-xl--letter-spacing: -0.03em;
+  --font-size-display-xl--font-weight: 700;
+
+  --font-size-display-xl-mobile:    36px;
+  --font-size-display-xl-mobile--line-height: 44px;
+  --font-size-display-xl-mobile--letter-spacing: -0.02em;
+  --font-size-display-xl-mobile--font-weight: 700;
+
+  --font-size-label-mono:           13px;
+  --font-size-label-mono--line-height: 20px;
+  --font-size-label-mono--font-weight: 500;
+
+  /* ── Border Radius ── */
+  --radius-sm:                      0.375rem;
+  --radius-lg:                      0.5rem;
+  --radius-xl:                      0.75rem;
+  --radius-2xl:                     1rem;
+
+  /* ── Shadows ── */
+  --shadow-card:                    0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover:              0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.04);
+  --shadow-dropdown:                0 8px 24px 0 rgb(0 0 0 / 0.10), 0 2px 6px -1px rgb(0 0 0 / 0.06);
+  --shadow-modal:                   0 20px 60px 0 rgb(0 0 0 / 0.15), 0 8px 20px -4px rgb(0 0 0 / 0.08);
+
+  /* ── Animations (subtle, purposeful only) ── */
+  --animate-fade-in:                fade-in 0.2s ease-out;
+  --animate-slide-up:               slide-up 0.25s ease-out;
+  --animate-pulse-status:           pulse-status 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Keyframes ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-status {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+
+/* ── Global Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body {
+  background-color: #F8F8F6;
+  color: #374151;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* ── Perceptra Component Utilities ── */
+
+/* Card — replaces glass-card */
+.p-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+}
+
+.p-card-hover {
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.p-card-hover:hover {
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.04);
+  border-color: #D1D5DB;
+}
+
+/* Input */
+.p-input {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  color: #1E1E1E;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+.p-input:focus {
+  border-color: #D4A017;
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+}
+.p-input::placeholder {
+  color: #9CA3AF;
+}
+
+/* Button — primary (gold) */
+.p-btn-primary {
+  background: #D4A017;
+  color: #FFFFFF;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+  border: none;
+}
+.p-btn-primary:hover {
+  background: #B88A12;
+  box-shadow: 0 4px 12px rgba(212, 160, 23, 0.30);
+}
+.p-btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Button — secondary (outlined) */
+.p-btn-secondary {
+  background: #FFFFFF;
+  color: #1E1E1E;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+.p-btn-secondary:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+/* Button — ghost */
+.p-btn-ghost {
+  background: transparent;
+  color: #6B7280;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  border: none;
+}
+.p-btn-ghost:hover {
+  background: #F3F4F6;
+  color: #1E1E1E;
+}
+
+/* Status dot */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot-online  { background: #10B981; }
+.status-dot-warning { background: #FACC15; }
+.status-dot-error   { background: #DC2626; }
+.status-dot-idle    { background: #9CA3AF; }
+.status-dot-pulse   { animation: pulse-status 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+/* Threat badge */
+.threat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.threat-badge-low      { background: #F9FAFB; color: #6B7280;  border: 1px solid #E5E7EB;  }
+.threat-badge-medium   { background: #FEFCE8; color: #92400E;  border: 1px solid #FDE68A;  }
+.threat-badge-high     { background: #FFF7ED; color: #C2410C;  border: 1px solid #FDBA74;  }
+.threat-badge-critical { background: #FEF2F2; color: #991B1B;  border: 1px solid #FECACA;  }
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6B7280;
+}
+
+/* Divider */
+.p-divider {
+  height: 1px;
+  background: #E5E7EB;
+  border: none;
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar       { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #F3F4F6; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+/* Landing page nav */
+.glass-nav {
+  background: rgba(248, 248, 246, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E5E7EB;
+}
+
+/* Auth page background */
+.bg-mesh {
+  background-color: #F8F8F6;
+  background-image:
+    radial-gradient(at 10% 10%, rgba(212, 160, 23, 0.06) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
+}
+
+/* Legacy aliases — keep components that reference old classes rendering gracefully */
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.75rem;
+}
+.glass-glow {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+}
+.input-glow:focus-within {
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+  border-color: #D4A017;
+}
+.active-nav-glow { box-shadow: none; }
+.text-glow       { text-shadow: none; }
+.button-glow:hover { box-shadow: 0 4px 12px rgba(212, 160, 23, 0.25); }
+.hero-mask {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+.segmented-track {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+}
+.otp-input {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  transition: all 0.2s ease;
+}
+.otp-input:focus {
+  background: #FFFFFF;
+  border-color: #D4A017;
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.12);
+  outline: none;
+}
+.scan-line          { display: none; }
+.scanline-overlay   { display: none; }
+.threat-glow-critical { box-shadow: none; }
+.threat-glow-high     { box-shadow: none; }
+
+/* Material symbols */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Animate utilities */
+.animate-fade-in  { animation: fade-in 0.2s ease-out; }
+.animate-slide-up { animation: slide-up 0.25s ease-out; }

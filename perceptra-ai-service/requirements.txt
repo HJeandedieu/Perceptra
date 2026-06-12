@@ -1,0 +1,19 @@
+# Computer vision & inference
+ultralytics>=8.2.18
+opencv-python>=4.9.0.80
+
+# Async HTTP client
+httpx==0.27.0
+
+# WebSocket client
+websockets==12.0
+
+# Numpy — Python 3.13 compatible
+numpy>=2.0.0
+
+# PyTorch — CPU build, Python 3.13 compatible
+torch>=2.6.0
+torchvision>=0.21.0
+
+# Testing
+pytest==8.2.0
