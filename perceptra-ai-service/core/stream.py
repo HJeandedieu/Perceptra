@@ -14,7 +14,8 @@ class VideoStream:
         self.cap = cv2.VideoCapture(source)
 
         if not self.cap.isOpened():
-            raise RuntimeError(f"[stream] Could not open video source: {source}")
+            from utils.logger import log
+            log.warning(f"[stream] Could not open video source: {source} — will retry on read()")
 
         self.ret = False
         self.frame = None
@@ -33,6 +34,11 @@ class VideoStream:
         """Continuously read frames into memory."""
         while self.running:
             ret, frame = self.cap.read()
+            
+            if not ret:
+                self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # loop back to start
+                continue
+            
             with self._lock:
                 self.ret = ret
                 self.frame = frame
@@ -40,7 +46,9 @@ class VideoStream:
     def read(self):
         """Return the latest (ret, frame) pair."""
         with self._lock:
-            return self.ret, self.frame.copy() if self.frame is not None else (False, None)
+            if self.frame is None:
+                return False, None
+            return self.ret, self.frame.copy()
 
     def stop(self):
         """Stop the capture thread and release the camera."""

@@ -1,0 +1,6 @@
+# .gitignore additions
+*.pt
+test_footage/
+__pycache__/
+*.pyc
+.env

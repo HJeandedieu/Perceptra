@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timezone
 from config import HEALTH_PORT
 from utils.logger import log
+import os
 
 # ---------------------------------------------------------------------------
 # Exposes a lightweight /health endpoint so the backend can verify
@@ -93,7 +94,8 @@ def start_health_server():
     Start the /health HTTP server in a background daemon thread.
     Call once from main.py before starting the inference loop.
     """
-    server = HTTPServer(("0.0.0.0", HEALTH_PORT), _HealthHandler)
+    port = int(os.environ.get("PORT", HEALTH_PORT))
+    server = HTTPServer(("0.0.0.0", port), _HealthHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     log.info(f"[health] Heartbeat server running on port {HEALTH_PORT} → GET /health")

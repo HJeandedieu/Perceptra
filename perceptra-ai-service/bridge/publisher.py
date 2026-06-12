@@ -23,8 +23,9 @@ class Publisher:
     def __init__(self):
         self._ws            = None
         self._ws_connected  = False
-        self._loop          = asyncio.new_event_loop()
         self._client        = httpx.AsyncClient(timeout=5.0)
+        self._loop          = asyncio.new_event_loop()
+        asyncio.get_event_loop_policy().set_event_loop(self._loop)
 
     # ------------------------------------------------------------------
     # Public API

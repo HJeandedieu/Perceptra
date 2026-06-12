@@ -13,11 +13,11 @@ import os
 # ------------------------------------------------------------------
 
 # Index for local USB/webcam (0 = default camera)
-CAM_INDEX: int = int(os.getenv("CAM_INDEX", 1))
+CAM_INDEX: int = int(os.getenv("CAM_INDEX", 0))
 
 # Set RTSP_URL to use an IP camera instead of local webcam
 # Example: "rtsp://admin:password@192.168.1.64/stream1"
-RTSP_URL: str = os.getenv("RTSP_URL", "")
+RTSP_URL: str = os.getenv("RTSP_URL", "test_footage/street.mp4")
 
 
 # ------------------------------------------------------------------
@@ -80,7 +80,7 @@ SEVERITY_COLORS: dict = {
 # ------------------------------------------------------------------
 
 # Show annotated OpenCV window during development (set to False in production)
-SHOW_PREVIEW: bool = os.getenv("SHOW_PREVIEW", "true").lower() == "true"
+SHOW_PREVIEW: bool = os.getenv("SHOW_PREVIEW", "false").lower() == "true"
 
 # Window title for the preview window
 PREVIEW_WINDOW_TITLE: str = "Perceptra — AI Engine"
