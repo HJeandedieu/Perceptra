@@ -16,10 +16,10 @@ import type { DetectionEvent } from '../api/events'
 const FEED_SRCS = [
   'https://images.pexels.com/photos/31971670/pexels-photo-31971670.jpeg',
   'https://images.pexels.com/photos/13003822/pexels-photo-13003822.jpeg',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuA8LHJ3lCz_H25UcnjmSUNDrzXneQL0CGZjMA_O8sDK6f0ksvexp4bqhGNi09NodJSOUld_q5a-VhtcPxVMX3Ru1FFYcJLrknr-bU6B31clQzIKJNfjboAfbiFa1OxshLuyKh43WCprzphZB8DMo--x1JIQvbQDYAXiJya-zl14Z9C4kC6XvTzdR0p-5p6C-CMX6TlfTpvHPT-6r2CipHcJapSqYxTvDQcVi-yyl-CfJqvwdDmob0t4pq3tlJEs8d9J2oOnSE_0-sE',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBCQNvlFr2f2q4Ihl2etfRKAV_F9nSzbvUQqdeASjSwosJY0XssGbUF-icmg8Wqc7kmlaDSfeZsZjg36GHen6BN0QQOBPxSi5yJdRluHBqgVRNyuKBxFqkcBuewRJXH8OuRNLtBYHwbufX_IbVUYtvfV4qPVpiVeNdyPxwR8WfMxurJvm0445e_0_tG4Iwo7oU2XBImyhm64Os-bwDo06dkAo6nGxEgMApn-5zEN0dvtRUSnip-Vz6HTNIZ37nhMbLOKMghVExGTv8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDhMsFPHc1NgctObrfBRPc6BscY8jLGtySxSRFkgtCBs2vpHHhtBWrLOucLUY3aLPW_GxFzmI3HcVNrxfnwB73bw_0yRzfW-EZjrSlIL5Br_b2au78Psl7oe2cs9jQuSx8bpWwEE1HZSxSQuqb2YmvwJ4HNtMNtnawkjvSdX65YdtbAgm2FlWuCDX7C9T0s7eq79wl5lJbtBkq6gwkfXEnoIFRjaOG_eASZRBEBtyMvbPGZESFG45pqjIz2UXgCtdkihfIW9pKlsKk',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuB0cLIzyKQSoYhznuykqDvu3jaI4bQ8hlhU8EbDv1TZ9bKE1IqWYkE8-Pmy3BPiBJKir7qKPZp6om2rhQ5EgOVzHIQIgXBgsIvKeQBWsedGGtFBgMdkValB-yfoEK4TmmzsffX_IkpGyY0-Cdka-o6tADmMS_oXaZuoU8SXIBIzrWFlb3Yf8x7_3G_HOe-zoyJ9WK6MqZeMyZy9e7ix_6j0SEJiRm2t-IMBp26-xhbw0rea21ObClw_XBWd2WhP_oomDJ3MoahJ9wU',
+  'https://images.pexels.com/photos/4508751/pexels-photo-4508751.jpeg',
+  'https://images.pexels.com/photos/15143512/pexels-photo-15143512.jpeg',
+  'https://images.pexels.com/photos/16551615/pexels-photo-16551615.jpeg',
+  'https://images.pexels.com/photos/2883048/pexels-photo-2883048.jpeg',
 ]
 
 interface Feed {
