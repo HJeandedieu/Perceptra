@@ -14,8 +14,8 @@ import type { DetectionEvent } from '../api/events'
 // ---------------------------------------------------------------------------
 
 const FEED_SRCS = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBwFmHcj1n5D5IQVMoO1TEx2fcwHQ_yo1dch5-KADfJdsdxi59Ktqao11NcIALxfvj3uIoJAPCQEBxcMdkzTL8LCDdY6rORzO6V_kgJbl8kSafHgYcAqAEbeh6ffLkh9TgwP7QBXgGzf6u-9IYU6mkIX7P_Iin36JPOGHeELTrxxx7gqeQ-R60BPFu2NtAfzxVXDNwRSAUB2onDBvBzO8Xr0HDOFx5rOaRF_4GJVKJ5ud1dCwUPfGwHqg9dTV4aiU06fu7AnGwgQBw',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCd4Y6S-3triut_Coy5e9W330_bgYZ7fGK5NgspFgldWMco6WKsDWHSdqMIGehoTb30Uzgzd0KmNpl4jSeGiIjOai-BjFeFOemU1P1VHB3Vf_2UMRlGyM3mzv63KYx5aqqJ98S0lPIIgSMfjB7QDKo4f2rLc15e_6OQP2EOQMbDuPIrKkxibuLBSIlHfUmEPkkEZudLNQvE2rJJFL4lqiIZbRXPwI8v-xR_WPB2uJa158TR94-7nbuLOjblbcrcLerGwCCLApJx1T8',
+  'https://images.pexels.com/photos/31971670/pexels-photo-31971670.jpeg',
+  'https://images.pexels.com/photos/13003822/pexels-photo-13003822.jpeg',
   'https://lh3.googleusercontent.com/aida-public/AB6AXuA8LHJ3lCz_H25UcnjmSUNDrzXneQL0CGZjMA_O8sDK6f0ksvexp4bqhGNi09NodJSOUld_q5a-VhtcPxVMX3Ru1FFYcJLrknr-bU6B31clQzIKJNfjboAfbiFa1OxshLuyKh43WCprzphZB8DMo--x1JIQvbQDYAXiJya-zl14Z9C4kC6XvTzdR0p-5p6C-CMX6TlfTpvHPT-6r2CipHcJapSqYxTvDQcVi-yyl-CfJqvwdDmob0t4pq3tlJEs8d9J2oOnSE_0-sE',
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBCQNvlFr2f2q4Ihl2etfRKAV_F9nSzbvUQqdeASjSwosJY0XssGbUF-icmg8Wqc7kmlaDSfeZsZjg36GHen6BN0QQOBPxSi5yJdRluHBqgVRNyuKBxFqkcBuewRJXH8OuRNLtBYHwbufX_IbVUYtvfV4qPVpiVeNdyPxwR8WfMxurJvm0445e_0_tG4Iwo7oU2XBImyhm64Os-bwDo06dkAo6nGxEgMApn-5zEN0dvtRUSnip-Vz6HTNIZ37nhMbLOKMghVExGTv8',
   'https://lh3.googleusercontent.com/aida-public/AB6AXuDhMsFPHc1NgctObrfBRPc6BscY8jLGtySxSRFkgtCBs2vpHHhtBWrLOucLUY3aLPW_GxFzmI3HcVNrxfnwB73bw_0yRzfW-EZjrSlIL5Br_b2au78Psl7oe2cs9jQuSx8bpWwEE1HZSxSQuqb2YmvwJ4HNtMNtnawkjvSdX65YdtbAgm2FlWuCDX7C9T0s7eq79wl5lJbtBkq6gwkfXEnoIFRjaOG_eASZRBEBtyMvbPGZESFG45pqjIz2UXgCtdkihfIW9pKlsKk',
