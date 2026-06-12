@@ -8,15 +8,17 @@ httpx==0.27.0
 # WebSocket client
 websockets==12.0
 
-# Numpy
-numpy>=2.0.0
+# Numpy — pinned for tensorflow-cpu compatibility
+numpy>=1.23.5,<2.0.0
 
 # PyTorch — CPU build
 torch>=2.6.0
 torchvision>=0.21.0
 
-# Testing
-pytest==8.2.0
-
+# Face recognition
 deepface==0.0.93
 tensorflow-cpu==2.16.1
+tensorflow==2.16.1
+
+# Testing
+pytest==8.2.0
