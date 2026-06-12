@@ -23,10 +23,6 @@ RUN python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')" \
     && mkdir -p models \
     && cp /root/.config/Ultralytics/yolov8n.pt models/ 2>/dev/null || true
 
-# Health check — Railway uses this to confirm the service is alive
-HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:${PORT:-8080}/health')"
-
 ENV SHOW_PREVIEW=false
 
 CMD ["python", "main.py"]

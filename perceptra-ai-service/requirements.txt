@@ -22,3 +22,5 @@ tensorflow==2.16.1
 
 # Testing
 pytest==8.2.0
+
+keras==2.16.0
