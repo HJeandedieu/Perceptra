@@ -100,4 +100,4 @@ See `.env.example` for all required variables. Never commit `.env` files.
 
 ## License
 
-Confidential — Perceptra Threat Intelligence © 2024
+Confidential — Perceptra Threat Intelligence © 2026
