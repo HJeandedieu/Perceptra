@@ -1806,3 +1806,36 @@
 [INFO] 2026-06-12 12:02:14 | [publisher] Event posted: person [medium]
 [INFO] 2026-06-12 12:02:14 | [publisher] Event posted: person [medium]
 [INFO] 2026-06-12 12:02:33 | [main] Shutting down...
+[INFO] 2026-06-12 20:01:00 | =======================================================
+[INFO] 2026-06-12 20:01:00 |   PERCEPTRA AI Engine — Starting
+[INFO] 2026-06-12 20:01:00 | =======================================================
+[INFO] 2026-06-12 20:01:00 | [loader] Loading YOLOv8 model from: models/yolov8n.pt
+[INFO] 2026-06-12 20:01:00 | [loader] Model loaded successfully — 3.2M parameters
+[WARNING] 2026-06-12 20:01:04 | [embeddings] Could not load registered faces: [WinError 10061] No connection could be made because the target machine actively refused it
+[WARNING] 2026-06-12 20:01:04 | [embeddings] Engine will treat all persons as unknown.
+[INFO] 2026-06-12 20:01:04 | [recognizer] Background recognition worker started.
+[INFO] 2026-06-12 20:01:04 | [health] Heartbeat server running on port 8080 → GET /health
+[INFO] 2026-06-12 20:01:04 | [main] Stream started — 1920x1080 @ 30fps
+[INFO] 2026-06-12 20:01:04 | [main] Inference loop starting...
+[WARNING] 2026-06-12 20:01:04 | [main] No frame received — camera unavailable.
+[ERROR] 2026-06-12 20:01:10 | [publisher] REST unreachable — backend not running
+[WARNING] 2026-06-12 20:01:12 | [publisher] WebSocket unreachable — backend not running
+[INFO] 2026-06-12 20:01:15 | [main] Frame 100 | FPS: 0.0 | Detections: 11
+[INFO] 2026-06-12 20:01:22 | [main] Frame 200 | FPS: 0.0 | Detections: 19
+[INFO] 2026-06-12 20:01:29 | [main] Frame 300 | FPS: 0.0 | Detections: 15
+[INFO] 2026-06-12 20:01:40 | [main] Frame 400 | FPS: 0.0 | Detections: 0
+[INFO] 2026-06-12 20:01:47 | [main] Frame 500 | FPS: 0.0 | Detections: 0
+[INFO] 2026-06-12 20:01:53 | [main] Frame 600 | FPS: 0.0 | Detections: 0
+[INFO] 2026-06-12 20:02:07 | [main] Frame 700 | FPS: 0.0 | Detections: 22
+[INFO] 2026-06-12 20:02:23 | [main] Frame 800 | FPS: 0.0 | Detections: 14
+[ERROR] 2026-06-12 20:02:26 | [publisher] REST unreachable — backend not running
+[WARNING] 2026-06-12 20:02:28 | [publisher] WebSocket unreachable — backend not running
+[INFO] 2026-06-12 20:02:43 | [main] Frame 900 | FPS: 0.0 | Detections: 10
+[INFO] 2026-06-12 20:03:00 | [main] Frame 1000 | FPS: 0.0 | Detections: 16
+[INFO] 2026-06-12 20:03:20 | [main] Frame 1100 | FPS: 0.0 | Detections: 0
+[INFO] 2026-06-12 20:03:28 | [main] Frame 1200 | FPS: 0.0 | Detections: 0
+[INFO] 2026-06-12 20:03:38 | [main] Frame 1300 | FPS: 0.0 | Detections: 18
+[ERROR] 2026-06-12 20:03:44 | [publisher] REST unreachable — backend not running
+[WARNING] 2026-06-12 20:03:46 | [publisher] WebSocket unreachable — backend not running
+[INFO] 2026-06-12 20:03:51 | [main] Frame 1400 | FPS: 0.0 | Detections: 21
+[INFO] 2026-06-12 20:03:56 | [main] Shutting down...
