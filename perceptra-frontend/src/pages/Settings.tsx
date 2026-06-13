@@ -217,7 +217,7 @@ function PersonsTab({ userRole }: { userRole?: string }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Jean de Dieu"
-              className="p-input w-full mt-1"
+              className="p-input w-full mt-1 py-3 px-2"
               style={{ fontSize: 13 }}
             />
           </div>
@@ -230,7 +230,7 @@ function PersonsTab({ userRole }: { userRole?: string }) {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="p-input w-full mt-1"
+              className="p-input w-full mt-1 py-3 px-2"
               style={{ fontSize: 13 }}
             >
               {['staff', 'student', 'visitor', 'security', 'admin'].map((r) => (
@@ -386,8 +386,8 @@ function SystemTab() {
         </h2>
         <div className="space-y-3">
           {[
-            { label: 'Backend API',       value: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000' },
-            { label: 'WebSocket',         value: import.meta.env.VITE_WS_URL       ?? 'ws://localhost:5000/ws/events' },
+            { label: 'Backend API',       value: import.meta.env.VITE_API_BASE_URL ?? 'https://perceptra.onrender.com' },
+            { label: 'WebSocket',         value: import.meta.env.VITE_WS_URL       ?? 'ws://https://perceptra.onrender.com/ws/events' },
             { label: 'AI Engine Health',  value: 'http://localhost:8080/health' },
           ].map(({ label, value }) => (
             <div key={label}>
