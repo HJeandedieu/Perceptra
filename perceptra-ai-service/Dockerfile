@@ -14,6 +14,7 @@ WORKDIR /app
 # Install Python dependencies first (layer cache)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN python -c "from deepface import DeepFace; DeepFace.build_model('Facenet')" 2>/dev/null || true
 
 # Copy source
 COPY . .
