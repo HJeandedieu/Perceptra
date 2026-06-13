@@ -10,9 +10,9 @@ const navItems = [
 ]
 
 const PERCEPTRA_LOGO =
-'../../public/favicon.svg'
+'https://perceptra-phi.vercel.app/public/favicon.svg'
 const DEFAULT_AVATAR =
-'../../public/favicon.svg'
+'https://perceptra-phi.vercel.app/public/favicon.svg'
 export default function Sidebar() {
   const location  = useLocation()
   const navigate  = useNavigate()
