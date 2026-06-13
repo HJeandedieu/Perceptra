@@ -29,9 +29,8 @@ server.listen(config.port, async () => {
     process.exit(1);
   }
 
-  console.log(`[server] Running on http://localhost:${config.port}`);
-  console.log(`[ws]     WebSocket on ws://localhost:${config.port}/ws/events`);
-  console.log(`[health] GET http://localhost:${config.port}/health`);
+  console.log(`[server] Running on port ${config.port}`);
+  console.log(`[ws]     WebSocket on ws port ${config.port}`);
   console.log('='.repeat(55));
 });
 
