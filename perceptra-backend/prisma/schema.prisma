@@ -1,0 +1,75 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------
+// User — security operators who log into the dashboard
+// ------------------------------------------------------------------
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+}
+
+// ------------------------------------------------------------------
+// Person — registered individuals the AI engine recognises
+// ------------------------------------------------------------------
+model Person {
+  id            String   @id @default(uuid())
+  name          String
+  role          String   // e.g. "staff", "student", "visitor"
+  faceImageB64  String   // base64 encoded face image for FaceNet
+  registeredAt  DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ------------------------------------------------------------------
+// Event — threat detection events posted by the AI engine
+// ------------------------------------------------------------------
+model Event {
+  id             String   @id @default(uuid())
+  eventId        String   @unique  // UUID from AI engine
+  timestamp      DateTime
+  label          String            // e.g. "person", "knife", "gun"
+  confidence     Float
+  bboxX1         Int
+  bboxY1         Int
+  bboxX2         Int
+  bboxY2         Int
+  severity       Severity
+  threatScore    Float
+  loiterSeconds  Float
+  frameId        Int
+  source         String   @default("ai_engine")
+  identity       String?           // "registered" | "unknown" | null
+  personName     String?           // matched person name if registered
+  alertSent      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@index([severity])
+  @@index([timestamp])
+  @@index([label])
+}
+
+enum Severity {
+  low
+  medium
+  high
+  critical
+}
