@@ -5,13 +5,14 @@ FROM python:3.11-slim
 
 # ---------------------------------------------------------------
 # System dependencies
+# libgl1 replaces libgl1-mesa-glx on Debian Trixie
 # ---------------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender-dev \
-    libgl1-mesa-glx \
+    libgl1 \
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
     ffmpeg \

@@ -1,5 +1,6 @@
 # core/stream.py
 import cv2
+import time
 import threading
 import logging
 from config import get_stream_source, STREAM_WIDTH, STREAM_HEIGHT
@@ -29,36 +30,42 @@ class VideoStream:
         """Open the stream and start the background capture thread."""
         self._cap = cv2.VideoCapture(self._source)
 
-        if not self._cap.isOpened():
-            raise RuntimeError(f"[stream] Could not open source: {self._source}")
-
-        # Apply resolution settings
-        self._cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
-        self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
-
-        # Read actual values back
-        self.width  = int(self._cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.height = int(self._cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.fps    = self._cap.get(cv2.CAP_PROP_FPS) or 25.0
+        # Don't crash if stream unavailable — retry in capture loop
+        if self._cap.isOpened():
+            self._cap.set(cv2.CAP_PROP_FRAME_WIDTH,  self.width)
+            self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+            self.width  = int(self._cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            self.height = int(self._cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            self.fps    = self._cap.get(cv2.CAP_PROP_FPS) or 25.0
+            log.info(f"[stream] Started — {self.width}x{self.height} @ {self.fps:.0f}fps — source: {self._source}")
+        else:
+            log.warning(f"[stream] Could not open source: {self._source} — will retry in capture loop")
 
         self._running = True
         self._thread  = threading.Thread(target=self._capture_loop, daemon=True)
         self._thread.start()
-
-        log.info(f"[stream] Started — {self.width}x{self.height} @ {self.fps:.0f}fps — source: {self._source}")
         return self
 
     def _capture_loop(self):
-        """Continuously read frames into memory."""
+        """Continuously read frames, retrying if stream drops."""
         while self._running:
+            if self._cap is None or not self._cap.isOpened():
+                log.warning("[stream] Stream unavailable — retrying in 5s...")
+                time.sleep(5)
+                self._cap = cv2.VideoCapture(self._source)
+                continue
+
             ret, frame = self._cap.read()
             if not ret:
-                log.warning("[stream] Frame read failed — retrying...")
+                log.warning("[stream] Frame read failed — reconnecting...")
+                self._cap.release()
+                self._cap = cv2.VideoCapture(self._source)
+                time.sleep(2)
                 continue
+
             with self._lock:
                 self._ret   = ret
                 self._frame = frame
-
     def read(self):
         """
         Return the latest (ret, frame) pair.
