@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DashboardLayout from '../layouts/DashboardLayout'
 import {
   getEvents,
@@ -9,39 +9,33 @@ import {
 } from '../api/events'
 import type { DetectionEvent } from '../api/events'
 
-// ---------------------------------------------------------------------------
-// Static camera feeds (placeholder images until real RTSP streams are wired)
-// ---------------------------------------------------------------------------
-
-const FEED_SRCS = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBwFmHcj1n5D5IQVMoO1TEx2fcwHQ_yo1dch5-KADfJdsdxi59Ktqao11NcIALxfvj3uIoJAPCQEBxcMdkzTL8LCDdY6rORzO6V_kgJbl8kSafHgYcAqAEbeh6ffLkh9TgwP7QBXgGzf6u-9IYU6mkIX7P_Iin36JPOGHeELTrxxx7gqeQ-R60BPFu2NtAfzxVXDNwRSAUB2onDBvBzO8Xr0HDOFx5rOaRF_4GJVKJ5ud1dCwUPfGwHqg9dTV4aiU06fu7AnGwgQBw',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCd4Y6S-3triut_Coy5e9W330_bgYZ7fGK5NgspFgldWMco6WKsDWHSdqMIGehoTb30Uzgzd0KmNpl4jSeGiIjOai-BjFeFOemU1P1VHB3Vf_2UMRlGyM3mzv63KYx5aqqJ98S0lPIIgSMfjB7QDKo4f2rLc15e_6OQP2EOQMbDuPIrKkxibuLBSIlHfUmEPkkEZudLNQvE2rJJFL4lqiIZbRXPwI8v-xR_WPB2uJa158TR94-7nbuLOjblbcrcLerGwCCLApJx1T8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuA8LHJ3lCz_H25UcnjmSUNDrzXneQL0CGZjMA_O8sDK6f0ksvexp4bqhGNi09NodJSOUld_q5a-VhtcPxVMX3Ru1FFYcJLrknr-bU6B31clQzIKJNfjboAfbiFa1OxshLuyKh43WCprzphZB8DMo--x1JIQvbQDYAXiJya-zl14Z9C4kC6XvTzdR0p-5p6C-CMX6TlfTpvHPT-6r2CipHcJapSqYxTvDQcVi-yyl-CfJqvwdDmob0t4pq3tlJEs8d9J2oOnSE_0-sE',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBCQNvlFr2f2q4Ihl2etfRKAV_F9nSzbvUQqdeASjSwosJY0XssGbUF-icmg8Wqc7kmlaDSfeZsZjg36GHen6BN0QQOBPxSi5yJdRluHBqgVRNyuKBxFqkcBuewRJXH8OuRNLtBYHwbufX_IbVUYtvfV4qPVpiVeNdyPxwR8WfMxurJvm0445e_0_tG4Iwo7oU2XBImyhm64Os-bwDo06dkAo6nGxEgMApn-5zEN0dvtRUSnip-Vz6HTNIZ37nhMbLOKMghVExGTv8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDhMsFPHc1NgctObrfBRPc6BscY8jLGtySxSRFkgtCBs2vpHHhtBWrLOucLUY3aLPW_GxFzmI3HcVNrxfnwB73bw_0yRzfW-EZjrSlIL5Br_b2au78Psl7oe2cs9jQuSx8bpWwEE1HZSxSQuqb2YmvwJ4HNtMNtnawkjvSdX65YdtbAgm2FlWuCDX7C9T0s7eq79wl5lJbtBkq6gwkfXEnoIFRjaOG_eASZRBEBtyMvbPGZESFG45pqjIz2UXgCtdkihfIW9pKlsKk',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuB0cLIzyKQSoYhznuykqDvu3jaI4bQ8hlhU8EbDv1TZ9bKE1IqWYkE8-Pmy3BPiBJKir7qKPZp6om2rhQ5EgOVzHIQIgXBgsIvKeQBWsedGGtFBgMdkValB-yfoEK4TmmzsffX_IkpGyY0-Cdka-o6tADmMS_oXaZuoU8SXIBIzrWFlb3Yf8x7_3G_HOe-zoyJ9WK6MqZeMyZy9e7ix_6j0SEJiRm2t-IMBp26-xhbw0rea21ObClw_XBWd2WhP_oomDJ3MoahJ9wU',
-]
+const STREAM_URL =
+  import.meta.env.VITE_STREAM_URL ?? 'https://redblue7-perceptra.hf.space/stream'
 
 interface Feed {
   id:         number
   name:       string
   cam:        string
   resolution: string
-  src:        string
+  isLive:     boolean
 }
 
 const FEEDS: Feed[] = [
-  { id: 1, name: 'Main Entrance',    cam: 'CAM-01', resolution: '1080P / 60fps', src: FEED_SRCS[0] },
-  { id: 2, name: 'South Corridor',   cam: 'CAM-04', resolution: '1080P / 60fps', src: FEED_SRCS[1] },
-  { id: 3, name: 'Server Room A',    cam: 'CAM-09', resolution: '4K / 30fps',    src: FEED_SRCS[2] },
-  { id: 4, name: 'Loading Dock',     cam: 'CAM-12', resolution: '1080P / 60fps', src: FEED_SRCS[3] },
-  { id: 5, name: 'Parking B2',       cam: 'CAM-22', resolution: '1080P / 30fps', src: FEED_SRCS[4] },
-  { id: 6, name: 'Executive Lounge', cam: 'CAM-30', resolution: '4K / 30fps',    src: FEED_SRCS[5] },
+  { id: 1, name: 'Main Entrance',    cam: 'CAM-01', resolution: '640x480 / 25fps', isLive: true  },
+  { id: 2, name: 'South Corridor',   cam: 'CAM-04', resolution: '1080P / 60fps',   isLive: false },
+  { id: 3, name: 'Server Room A',    cam: 'CAM-09', resolution: '4K / 30fps',      isLive: false },
+  { id: 4, name: 'Loading Dock',     cam: 'CAM-12', resolution: '1080P / 60fps',   isLive: false },
+  { id: 5, name: 'Parking B2',       cam: 'CAM-22', resolution: '1080P / 30fps',   isLive: false },
+  { id: 6, name: 'Executive Lounge', cam: 'CAM-30', resolution: '4K / 30fps',      isLive: false },
 ]
 
-// ---------------------------------------------------------------------------
-// Detection display type — mapped from backend DetectionEvent
-// ---------------------------------------------------------------------------
+const PLACEHOLDER_SRCS = [
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuCd4Y6S-3triut_Coy5e9W330_bgYZ7fGK5NgspFgldWMco6WKsDWHSdqMIGehoTb30Uzgzd0KmNpl4jSeGiIjOai-BjFeFOemU1P1VHB3Vf_2UMRlGyM3mzv63KYx5aqqJ98S0lPIIgSMfjB7QDKo4f2rLc15e_6OQP2EOQMbDuPIrKkxibuLBSIlHfUmEPkkEZudLNQvE2rJJFL4lqiIZbRXPwI8v-xR_WPB2uJa158TR94-7nbuLOjblbcrcLerGwCCLApJx1T8',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuA8LHJ3lCz_H25UcnjmSUNDrzXneQL0CGZjMA_O8sDK6f0ksvexp4bqhGNi09NodJSOUld_q5a-VhtcPxVMX3Ru1FFYcJLrknr-bU6B31clQzIKJNfjboAfbiFa1OxshLuyKh43WCprzphZB8DMo--x1JIQvbQDYAXiJya-zl14Z9C4kC6XvTzdR0p-5p6C-CMX6TlfTpvHPT-6r2CipHcJapSqYxTvDQcVi-yyl-CfJqvwdDmob0t4pq3tlJEs8d9J2oOnSE_0-sE',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBCQNvlFr2f2q4Ihl2etfRKAV_F9nSzbvUQqdeASjSwosJY0XssGbUF-icmg8Wqc7kmlaDSfeZsZjg36GHen6BN0QQOBPxSi5yJdRluHBqgVRNyuKBxFqkcBuewRJXH8OuRNLtBYHwbufX_IbVUYtvfV4qPVpiVeNdyPxwR8WfMxurJvm0445e_0_tG4Iwo7oU2XBImyhm64Os-bwDo06dkAo6nGxEgMApn-5zEN0dvtRUSnip-Vz6HTNIZ37nhMbLOKMghVExGTv8',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuDhMsFPHc1NgctObrfBRPc6BscY8jLGtySxSRFkgtCBs2vpHHhtBWrLOucLUY3aLPW_GxFzmI3HcVNrxfnwB73bw_0yRzfW-EZjrSlIL5Br_b2au78Psl7oe2cs9jQuSx8bpWwEE1HZSxSQuqb2YmvwJ4HNtMNtnawkjvSdX65YdtbAgm2FlWuCDX7C9T0s7eq79wl5lJbtBkq6gwkfXEnoIFRjaOG_eASZRBEBtyMvbPGZESFG45pqjIz2UXgCtdkihfIW9pKlsKk',
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuB0cLIzyKQSoYhznuykqDvu3jaI4bQ8hlhU8EbDv1TZ9bKE1IqWYkE8-Pmy3BPiBJKir7qKPZp6om2rhQ5EgOVzHIQIgXBgsIvKeQBWsedGGtFBgMdkValB-yfoEK4TmmzsffX_IkpGyY0-Cdka-o6tADmMS_oXaZuoU8SXIBIzrWFlb3Yf8x7_3G_HOe-zoyJ9WK6MqZeMyZy9e7ix_6j0SEJiRm2t-IMBp26-xhbw0rea21ObClw_XBWd2WhP_oomDJ3MoahJ9wU',
+]
 
 interface DetectionDisplay {
   id:          string
@@ -75,35 +69,28 @@ function eventToDisplay(e: DetectionEvent): DetectionDisplay {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export default function LiveFeed() {
-  const [time, setTime]         = useState(new Date())
-  const [selected, setSelected] = useState<Set<number>>(new Set())
-  const [search, setSearch]     = useState('')
+  const [time, setTime]               = useState(new Date())
+  const [search, setSearch]           = useState('')
+  const [streamOk, setStreamOk]       = useState(true)
+  const [wsConnected, setWsConnected] = useState(false)
   const [recentDetections, setRecentDetections] = useState<DetectionDisplay[]>([])
-  const [wsConnected, setWsConnected]           = useState(false)
+  const imgRef = useRef<HTMLImageElement>(null)
 
-  // Clock tick
   useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(interval)
+    const t = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(t)
   }, [])
 
-  // Fetch latest events + connect WebSocket
   useEffect(() => {
-    // Load last 10 events from REST on mount
     getEvents({ limit: 10, page: 1 })
       .then((res) => {
         if (res.data.length > 0) {
           setRecentDetections(res.data.map(eventToDisplay))
         }
       })
-      .catch(() => { /* backend not ready — leave list empty */ })
+      .catch(() => {})
 
-    // WebSocket for real-time updates
     const cleanup = connectDetectionStream(
       (event) => {
         setWsConnected(true)
@@ -117,15 +104,6 @@ export default function LiveFeed() {
 
     return cleanup
   }, [])
-
-  const toggleSelect = (id: number) => {
-    setSelected((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
 
   const timeStr = time.toLocaleTimeString('en-US', {
     hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit',
@@ -156,82 +134,115 @@ export default function LiveFeed() {
             className="p-input pl-9 pr-3 py-1.5 w-56"
             style={{ fontSize: 13 }}
             placeholder="Search by camera or location…"
-            type="text"
           />
         </div>
       }
     >
       <div className="flex gap-6" style={{ minHeight: 'calc(100vh - 160px)' }}>
 
-        {/* Video Wall Grid */}
+        {/* Video Wall */}
         <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 content-start">
-          {filteredFeeds.map((feed) => {
-            const isSelected = selected.has(feed.id)
-            return (
-              <div
-                key={feed.id}
-                onClick={() => toggleSelect(feed.id)}
-                className="p-card overflow-hidden cursor-pointer flex flex-col transition-all duration-150"
-                style={{
-                  borderColor: isSelected ? '#D4A017' : '#E5E7EB',
-                  boxShadow: isSelected
-                    ? '0 0 0 2px rgba(212,160,23,0.25), 0 4px 12px 0 rgb(0 0 0 / 0.08)'
-                    : undefined,
-                }}
-              >
-                <div className="relative" style={{ aspectRatio: '16 / 10', background: '#F3F4F6' }}>
-                  <img alt={feed.name} className="w-full h-full object-cover" src={feed.src} />
+          {filteredFeeds.map((feed, idx) => (
+            <div key={feed.id} className="p-card overflow-hidden flex flex-col">
+              <div className="relative" style={{ aspectRatio: '16 / 10', background: '#0f0f0f' }}>
 
-                  {/* LIVE badge */}
-                  <div
-                    className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2 py-1 rounded-md"
-                    style={{ background: 'rgba(0,0,0,0.55)' }}
-                  >
-                    <span className="status-dot status-dot-online status-dot-pulse" />
-                    <span style={{ fontSize: 10, fontWeight: 700, color: '#FFF', letterSpacing: '0.06em' }}>
-                      LIVE
-                    </span>
-                  </div>
+                {feed.isLive ? (
+                  <>
+                    <img
+                      ref={imgRef}
+                      src={STREAM_URL}
+                      alt={feed.name}
+                      className="w-full h-full object-cover"
+                      onLoad={() => setStreamOk(true)}
+                      onError={() => setStreamOk(false)}
+                    />
+                    {!streamOk && (
+                      <div
+                        className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+                        style={{ background: '#0f0f0f' }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#4B5563' }}>
+                          videocam_off
+                        </span>
+                        <p style={{ fontSize: 12, color: '#6B7280' }}>AI engine offline</p>
+                        <button
+                          onClick={() => {
+                            setStreamOk(true)
+                            if (imgRef.current) {
+                              imgRef.current.src = `${STREAM_URL}?t=${Date.now()}`
+                            }
+                          }}
+                          className="px-3 py-1 rounded-md"
+                          style={{ fontSize: 11, background: '#1F2937', color: '#9CA3AF', border: '1px solid #374151' }}
+                        >
+                          Retry
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <img
+                    alt={feed.name}
+                    src={PLACEHOLDER_SRCS[idx - 1] ?? PLACEHOLDER_SRCS[0]}
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                )}
 
-                  {/* WebSocket status indicator on first feed */}
-                  {feed.id === 1 && (
-                    <div
-                      className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md"
-                      style={{ background: 'rgba(0,0,0,0.55)' }}
-                    >
-                      <span
-                        style={{
-                          width: 6, height: 6, borderRadius: '50%',
-                          background: wsConnected ? '#22c55e' : '#ef4444',
-                          display: 'inline-block',
-                        }}
-                      />
-                      <span style={{ fontSize: 9, color: '#FFF', fontWeight: 600 }}>
-                        {wsConnected ? 'WS' : 'WS OFF'}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Timestamp */}
-                  <div
-                    className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded"
-                    style={{ background: 'rgba(0,0,0,0.55)' }}
-                  >
-                    <span style={{ fontSize: 11, fontWeight: 500, color: '#FFF', fontFamily: 'monospace' }}>
-                      {timeStr}
-                    </span>
-                  </div>
+                {/* LIVE / OFFLINE badge */}
+                <div
+                  className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2 py-1 rounded-md"
+                  style={{ background: 'rgba(0,0,0,0.65)' }}
+                >
+                  <span
+                    style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: feed.isLive && streamOk ? '#22c55e' : '#6B7280',
+                      display: 'inline-block',
+                    }}
+                  />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: '#FFF', letterSpacing: '0.06em' }}>
+                    {feed.isLive && streamOk ? 'LIVE' : 'OFFLINE'}
+                  </span>
                 </div>
 
-                <div className="px-3.5 py-2.5">
-                  <p className="font-semibold" style={{ fontSize: 13, color: '#1E1E1E' }}>{feed.name}</p>
-                  <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>
-                    {feed.cam} &bull; {feed.resolution}
-                  </p>
+                {/* WS indicator on main feed */}
+                {feed.isLive && (
+                  <div
+                    className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md"
+                    style={{ background: 'rgba(0,0,0,0.65)' }}
+                  >
+                    <span
+                      style={{
+                        width: 6, height: 6, borderRadius: '50%',
+                        background: wsConnected ? '#22c55e' : '#ef4444',
+                        display: 'inline-block',
+                      }}
+                    />
+                    <span style={{ fontSize: 9, color: '#FFF', fontWeight: 600 }}>
+                      {wsConnected ? 'EVENTS' : 'NO WS'}
+                    </span>
+                  </div>
+                )}
+
+                {/* Timestamp */}
+                <div
+                  className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded"
+                  style={{ background: 'rgba(0,0,0,0.65)' }}
+                >
+                  <span style={{ fontSize: 11, fontWeight: 500, color: '#FFF', fontFamily: 'monospace' }}>
+                    {timeStr}
+                  </span>
                 </div>
               </div>
-            )
-          })}
+
+              <div className="px-3.5 py-2.5">
+                <p className="font-semibold" style={{ fontSize: 13, color: '#1E1E1E' }}>{feed.name}</p>
+                <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>
+                  {feed.cam} &bull; {feed.resolution}
+                </p>
+              </div>
+            </div>
+          ))}
 
           {filteredFeeds.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
@@ -243,11 +254,9 @@ export default function LiveFeed() {
           )}
         </div>
 
-        {/* Right Sidebar: Activity Log */}
+        {/* Right sidebar */}
         <aside className="w-80 flex-shrink-0">
           <div className="p-card flex flex-col h-full" style={{ position: 'sticky', top: 0 }}>
-
-            {/* Header */}
             <div
               className="flex items-center justify-between px-4 py-3.5"
               style={{ borderBottom: '1px solid #E5E7EB' }}
@@ -264,7 +273,6 @@ export default function LiveFeed() {
               </span>
             </div>
 
-            {/* List */}
             <div
               className="flex-grow overflow-y-auto custom-scrollbar p-3 space-y-2.5"
               style={{ maxHeight: 560 }}
@@ -333,7 +341,6 @@ export default function LiveFeed() {
               ))}
             </div>
 
-            {/* Footer */}
             <div className="p-3" style={{ borderTop: '1px solid #E5E7EB' }}>
               <button className="p-btn-secondary w-full py-2" style={{ fontSize: 12, fontWeight: 600 }}>
                 View All System Logs
