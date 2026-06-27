@@ -21,20 +21,7 @@ interface Feed {
 }
 
 const FEEDS: Feed[] = [
-  { id: 1, name: 'Main Entrance',    cam: 'CAM-01', resolution: '640x480 / 25fps', isLive: true  },
-  { id: 2, name: 'South Corridor',   cam: 'CAM-04', resolution: '1080P / 60fps',   isLive: false },
-  { id: 3, name: 'Server Room A',    cam: 'CAM-09', resolution: '4K / 30fps',      isLive: false },
-  { id: 4, name: 'Loading Dock',     cam: 'CAM-12', resolution: '1080P / 60fps',   isLive: false },
-  { id: 5, name: 'Parking B2',       cam: 'CAM-22', resolution: '1080P / 30fps',   isLive: false },
-  { id: 6, name: 'Executive Lounge', cam: 'CAM-30', resolution: '4K / 30fps',      isLive: false },
-]
-
-const PLACEHOLDER_SRCS = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCd4Y6S-3triut_Coy5e9W330_bgYZ7fGK5NgspFgldWMco6WKsDWHSdqMIGehoTb30Uzgzd0KmNpl4jSeGiIjOai-BjFeFOemU1P1VHB3Vf_2UMRlGyM3mzv63KYx5aqqJ98S0lPIIgSMfjB7QDKo4f2rLc15e_6OQP2EOQMbDuPIrKkxibuLBSIlHfUmEPkkEZudLNQvE2rJJFL4lqiIZbRXPwI8v-xR_WPB2uJa158TR94-7nbuLOjblbcrcLerGwCCLApJx1T8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuA8LHJ3lCz_H25UcnjmSUNDrzXneQL0CGZjMA_O8sDK6f0ksvexp4bqhGNi09NodJSOUld_q5a-VhtcPxVMX3Ru1FFYcJLrknr-bU6B31clQzIKJNfjboAfbiFa1OxshLuyKh43WCprzphZB8DMo--x1JIQvbQDYAXiJya-zl14Z9C4kC6XvTzdR0p-5p6C-CMX6TlfTpvHPT-6r2CipHcJapSqYxTvDQcVi-yyl-CfJqvwdDmob0t4pq3tlJEs8d9J2oOnSE_0-sE',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBCQNvlFr2f2q4Ihl2etfRKAV_F9nSzbvUQqdeASjSwosJY0XssGbUF-icmg8Wqc7kmlaDSfeZsZjg36GHen6BN0QQOBPxSi5yJdRluHBqgVRNyuKBxFqkcBuewRJXH8OuRNLtBYHwbufX_IbVUYtvfV4qPVpiVeNdyPxwR8WfMxurJvm0445e_0_tG4Iwo7oU2XBImyhm64Os-bwDo06dkAo6nGxEgMApn-5zEN0dvtRUSnip-Vz6HTNIZ37nhMbLOKMghVExGTv8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDhMsFPHc1NgctObrfBRPc6BscY8jLGtySxSRFkgtCBs2vpHHhtBWrLOucLUY3aLPW_GxFzmI3HcVNrxfnwB73bw_0yRzfW-EZjrSlIL5Br_b2au78Psl7oe2cs9jQuSx8bpWwEE1HZSxSQuqb2YmvwJ4HNtMNtnawkjvSdX65YdtbAgm2FlWuCDX7C9T0s7eq79wl5lJbtBkq6gwkfXEnoIFRjaOG_eASZRBEBtyMvbPGZESFG45pqjIz2UXgCtdkihfIW9pKlsKk',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuB0cLIzyKQSoYhznuykqDvu3jaI4bQ8hlhU8EbDv1TZ9bKE1IqWYkE8-Pmy3BPiBJKir7qKPZp6om2rhQ5EgOVzHIQIgXBgsIvKeQBWsedGGtFBgMdkValB-yfoEK4TmmzsffX_IkpGyY0-Cdka-o6tADmMS_oXaZuoU8SXIBIzrWFlb3Yf8x7_3G_HOe-zoyJ9WK6MqZeMyZy9e7ix_6j0SEJiRm2t-IMBp26-xhbw0rea21ObClw_XBWd2WhP_oomDJ3MoahJ9wU',
+  { id: 1, name: 'Main Entrance', cam: 'CAM-01', resolution: '640x480 / 25fps', isLive: true },
 ]
 
 interface DetectionDisplay {
@@ -71,7 +58,6 @@ function eventToDisplay(e: DetectionEvent): DetectionDisplay {
 
 export default function LiveFeed() {
   const [time, setTime]               = useState(new Date())
-  const [search, setSearch]           = useState('')
   const [streamOk, setStreamOk]       = useState(true)
   const [wsConnected, setWsConnected] = useState(false)
   const [recentDetections, setRecentDetections] = useState<DetectionDisplay[]>([])
@@ -83,7 +69,7 @@ export default function LiveFeed() {
   }, [])
 
   useEffect(() => {
-    getEvents({ limit: 10, page: 1 })
+    getEvents({ limit: 20, page: 1 })
       .then((res) => {
         if (res.data.length > 0) {
           setRecentDetections(res.data.map(eventToDisplay))
@@ -96,7 +82,7 @@ export default function LiveFeed() {
         setWsConnected(true)
         setRecentDetections((prev) => [
           eventToDisplay(event),
-          ...prev.slice(0, 19),
+          ...prev.slice(0, 49),
         ])
       },
       () => setWsConnected(false),
@@ -109,180 +95,244 @@ export default function LiveFeed() {
     hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit',
   })
 
-  const filteredFeeds = search.trim()
-    ? FEEDS.filter((f) =>
-        f.name.toLowerCase().includes(search.toLowerCase()) ||
-        f.cam.toLowerCase().includes(search.toLowerCase()),
-      )
-    : FEEDS
+  const feed = FEEDS[0]
 
   return (
     <DashboardLayout
       title="Live Feed"
       subtitle="Operational Oversight"
       actions={
-        <div className="relative">
-          <span
-            className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ fontSize: 16, color: '#9CA3AF' }}
-          >
-            search
-          </span>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="p-input pl-9 pr-3 py-1.5 w-56"
-            style={{ fontSize: 13 }}
-            placeholder="Search by camera or location…"
-          />
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <span
+              style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: wsConnected ? '#22c55e' : '#ef4444',
+                display: 'inline-block',
+              }}
+            />
+            <span style={{ fontSize: 12, color: wsConnected ? '#16a34a' : '#dc2626', fontWeight: 600 }}>
+              {wsConnected ? 'Events Live' : 'Events Offline'}
+            </span>
+          </div>
         </div>
       }
     >
       <div className="flex gap-6" style={{ minHeight: 'calc(100vh - 160px)' }}>
 
-        {/* Video Wall */}
-        <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 content-start">
-          {filteredFeeds.map((feed, idx) => (
-            <div key={feed.id} className="p-card overflow-hidden flex flex-col">
-              <div className="relative" style={{ aspectRatio: '16 / 10', background: '#0f0f0f' }}>
+        {/* Main Camera Feed */}
+        <div className="flex-grow flex flex-col gap-5">
+          <div className="p-card overflow-hidden flex flex-col">
 
-                {feed.isLive ? (
-                  <>
-                    <img
-                      ref={imgRef}
-                      src={STREAM_URL}
-                      alt={feed.name}
-                      className="w-full h-full object-cover"
-                      onLoad={() => setStreamOk(true)}
-                      onError={() => setStreamOk(false)}
-                    />
-                    {!streamOk && (
-                      <div
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-                        style={{ background: '#0f0f0f' }}
-                      >
-                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#4B5563' }}>
-                          videocam_off
-                        </span>
-                        <p style={{ fontSize: 12, color: '#6B7280' }}>AI engine offline</p>
-                        <button
-                          onClick={() => {
-                            setStreamOk(true)
-                            if (imgRef.current) {
-                              imgRef.current.src = `${STREAM_URL}?t=${Date.now()}`
-                            }
-                          }}
-                          className="px-3 py-1 rounded-md"
-                          style={{ fontSize: 11, background: '#1F2937', color: '#9CA3AF', border: '1px solid #374151' }}
-                        >
-                          Retry
-                        </button>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <img
-                    alt={feed.name}
-                    src={PLACEHOLDER_SRCS[idx - 1] ?? PLACEHOLDER_SRCS[0]}
-                    className="w-full h-full object-cover opacity-60"
-                  />
-                )}
+            {/* Stream */}
+            <div className="relative w-full" style={{ aspectRatio: '16 / 9', background: '#0f0f0f' }}>
+              <img
+                ref={imgRef}
+                src={STREAM_URL}
+                alt={feed.name}
+                className="w-full h-full object-cover"
+                onLoad={() => setStreamOk(true)}
+                onError={() => setStreamOk(false)}
+              />
 
-                {/* LIVE / OFFLINE badge */}
+              {/* Offline overlay */}
+              {!streamOk && (
                 <div
-                  className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2 py-1 rounded-md"
-                  style={{ background: 'rgba(0,0,0,0.65)' }}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+                  style={{ background: '#0f0f0f' }}
                 >
-                  <span
-                    style={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      background: feed.isLive && streamOk ? '#22c55e' : '#6B7280',
-                      display: 'inline-block',
+                  <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#374151' }}>
+                    videocam_off
+                  </span>
+                  <p style={{ fontSize: 14, color: '#6B7280', fontWeight: 500 }}>
+                    AI Engine Offline
+                  </p>
+                  <p style={{ fontSize: 12, color: '#4B5563' }}>
+                    Start the engine and camera stream to connect
+                  </p>
+                  <button
+                    onClick={() => {
+                      setStreamOk(true)
+                      if (imgRef.current) {
+                        imgRef.current.src = `${STREAM_URL}?t=${Date.now()}`
+                      }
                     }}
-                  />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: '#FFF', letterSpacing: '0.06em' }}>
-                    {feed.isLive && streamOk ? 'LIVE' : 'OFFLINE'}
-                  </span>
-                </div>
-
-                {/* WS indicator on main feed */}
-                {feed.isLive && (
-                  <div
-                    className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-md"
-                    style={{ background: 'rgba(0,0,0,0.65)' }}
+                    className="px-4 py-2 rounded-lg mt-1"
+                    style={{
+                      fontSize: 13, fontWeight: 600,
+                      background: '#1F2937', color: '#D1D5DB',
+                      border: '1px solid #374151',
+                    }}
                   >
-                    <span
-                      style={{
-                        width: 6, height: 6, borderRadius: '50%',
-                        background: wsConnected ? '#22c55e' : '#ef4444',
-                        display: 'inline-block',
-                      }}
-                    />
-                    <span style={{ fontSize: 9, color: '#FFF', fontWeight: 600 }}>
-                      {wsConnected ? 'EVENTS' : 'NO WS'}
-                    </span>
-                  </div>
-                )}
-
-                {/* Timestamp */}
-                <div
-                  className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded"
-                  style={{ background: 'rgba(0,0,0,0.65)' }}
-                >
-                  <span style={{ fontSize: 11, fontWeight: 500, color: '#FFF', fontFamily: 'monospace' }}>
-                    {timeStr}
-                  </span>
+                    Retry Connection
+                  </button>
                 </div>
+              )}
+
+              {/* LIVE badge */}
+              <div
+                className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.70)' }}
+              >
+                <span
+                  style={{
+                    width: 7, height: 7, borderRadius: '50%',
+                    background: streamOk ? '#22c55e' : '#6B7280',
+                    display: 'inline-block',
+                    boxShadow: streamOk ? '0 0 6px #22c55e' : 'none',
+                  }}
+                />
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#FFF', letterSpacing: '0.08em' }}>
+                  {streamOk ? 'LIVE' : 'OFFLINE'}
+                </span>
               </div>
 
-              <div className="px-3.5 py-2.5">
-                <p className="font-semibold" style={{ fontSize: 13, color: '#1E1E1E' }}>{feed.name}</p>
-                <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>
-                  {feed.cam} &bull; {feed.resolution}
+              {/* Camera label */}
+              <div
+                className="absolute top-3 left-20 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.70)' }}
+              >
+                <span style={{ fontSize: 11, fontWeight: 600, color: '#D4A017' }}>
+                  {feed.cam}
+                </span>
+                <span style={{ fontSize: 11, color: '#9CA3AF' }}>
+                  {feed.name}
+                </span>
+              </div>
+
+              {/* WS indicator */}
+              <div
+                className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.70)' }}
+              >
+                <span
+                  style={{
+                    width: 7, height: 7, borderRadius: '50%',
+                    background: wsConnected ? '#22c55e' : '#ef4444',
+                    display: 'inline-block',
+                  }}
+                />
+                <span style={{ fontSize: 10, color: '#FFF', fontWeight: 600, letterSpacing: '0.05em' }}>
+                  {wsConnected ? 'WS LIVE' : 'WS OFF'}
+                </span>
+              </div>
+
+              {/* Timestamp */}
+              <div
+                className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.70)' }}
+              >
+                <span style={{ fontSize: 12, fontWeight: 500, color: '#FFF', fontFamily: 'monospace' }}>
+                  {timeStr}
+                </span>
+              </div>
+
+              {/* Resolution */}
+              <div
+                className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.70)' }}
+              >
+                <span style={{ fontSize: 11, color: '#9CA3AF' }}>
+                  {feed.resolution}
+                </span>
+              </div>
+            </div>
+
+            {/* Feed footer */}
+            <div
+              className="px-4 py-3 flex items-center justify-between"
+              style={{ borderTop: '1px solid #F3F4F6' }}
+            >
+              <div>
+                <p className="font-semibold" style={{ fontSize: 14, color: '#1E1E1E' }}>{feed.name}</p>
+                <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 1 }}>
+                  {feed.cam} &bull; YOLOv8 Detection Active
                 </p>
               </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="px-2.5 py-1 rounded-full"
+                  style={{
+                    fontSize: 11, fontWeight: 700,
+                    color: '#065F46', background: '#D1FAE5',
+                    letterSpacing: '0.05em',
+                  }}
+                >
+                  AI ACTIVE
+                </span>
+              </div>
             </div>
-          ))}
-
-          {filteredFeeds.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
-              <span className="material-symbols-outlined mb-2" style={{ fontSize: 32, color: '#D1D5DB' }}>
-                videocam_off
-              </span>
-              <p style={{ fontSize: 14, color: '#9CA3AF' }}>No cameras match "{search}".</p>
-            </div>
-          )}
+          </div>
         </div>
 
-        {/* Right sidebar */}
+        {/* Right Sidebar: Activity Log */}
         <aside className="w-80 flex-shrink-0">
-          <div className="p-card flex flex-col h-full" style={{ position: 'sticky', top: 0 }}>
+          <div className="p-card flex flex-col" style={{ position: 'sticky', top: 0, maxHeight: 'calc(100vh - 120px)' }}>
+
+            {/* Header */}
             <div
               className="flex items-center justify-between px-4 py-3.5"
               style={{ borderBottom: '1px solid #E5E7EB' }}
             >
               <h2 className="font-semibold flex items-center gap-2" style={{ fontSize: 14, color: '#1E1E1E' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#D4A017' }}>history</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#D4A017' }}>
+                  history
+                </span>
                 Recent Detections
               </h2>
               <span
                 className="px-2 py-0.5 rounded-full"
-                style={{ fontSize: 10, fontWeight: 700, color: '#92400E', background: '#FEF3C7', letterSpacing: '0.05em' }}
+                style={{
+                  fontSize: 10, fontWeight: 700,
+                  color: '#92400E', background: '#FEF3C7',
+                  letterSpacing: '0.05em',
+                }}
               >
                 LIVE
               </span>
             </div>
 
-            <div
-              className="flex-grow overflow-y-auto custom-scrollbar p-3 space-y-2.5"
-              style={{ maxHeight: 560 }}
-            >
+            {/* Detection count summary */}
+            {recentDetections.length > 0 && (
+              <div
+                className="px-4 py-2 flex items-center gap-3"
+                style={{ borderBottom: '1px solid #F3F4F6', background: '#FAFAFA' }}
+              >
+                {(['critical', 'high', 'medium', 'low'] as const).map((sev) => {
+                  const count = recentDetections.filter(d => d.severity === sev).length
+                  if (count === 0) return null
+                  return (
+                    <div key={sev} className="flex items-center gap-1">
+                      <span
+                        style={{
+                          width: 8, height: 8, borderRadius: '50%',
+                          background: severityColor(sev),
+                          display: 'inline-block',
+                        }}
+                      />
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#374151' }}>
+                        {count}
+                      </span>
+                      <span style={{ fontSize: 10, color: '#9CA3AF', textTransform: 'capitalize' }}>
+                        {sev}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* List */}
+            <div className="flex-grow overflow-y-auto custom-scrollbar p-3 space-y-2">
               {recentDetections.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <span className="material-symbols-outlined mb-2" style={{ fontSize: 28, color: '#D1D5DB' }}>
                     sensors
                   </span>
                   <p style={{ fontSize: 13, color: '#9CA3AF' }}>Waiting for detections…</p>
+                  <p style={{ fontSize: 11, color: '#D1D5DB', marginTop: 4 }}>
+                    Events appear here in real time
+                  </p>
                 </div>
               )}
 
@@ -314,7 +364,7 @@ export default function LiveFeed() {
                   </p>
 
                   {evt.showActions && (
-                    <div className="mt-2.5 flex gap-2">
+                    <div className="mt-2 flex gap-2">
                       <button
                         className="px-2.5 py-1 rounded-md"
                         style={{
@@ -341,6 +391,7 @@ export default function LiveFeed() {
               ))}
             </div>
 
+            {/* Footer */}
             <div className="p-3" style={{ borderTop: '1px solid #E5E7EB' }}>
               <button className="p-btn-secondary w-full py-2" style={{ fontSize: 12, fontWeight: 600 }}>
                 View All System Logs
