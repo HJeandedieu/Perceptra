@@ -1,358 +1,276 @@
 import { useState, useEffect } from 'react'
-import Sidebar from '../components/Sidebar'
-import { getReports } from '../api/reports'
-import type { ReportStats } from '../api/reports'
+import DashboardLayout from '../layouts/DashboardLayout'
+import { getStats, getEvents, severityColor } from '../api/events'
+import type { EventsStats, DetectionEvent } from '../api/events'
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell, Legend,
+} from 'recharts'
 
-const defaultStats: ReportStats = {
-  total_incidents: 1284,
-  avg_confidence: 94.2,
-  critical_alerts: 8,
-  active_time_hours: 342,
-  incident_trend: -12,
+// ---------------------------------------------------------------------------
+// Stat card
+// ---------------------------------------------------------------------------
+
+interface StatCardProps {
+  label:    string
+  value:    number | string
+  icon:     string
+  color:    string
+  sublabel?: string
 }
 
-const chartBars = [
-  { pct: 40, critical: false, high: false },
-  { pct: 60, critical: false, high: false },
-  { pct: 55, critical: false, high: false },
-  { pct: 85, critical: true,  high: false },
-  { pct: 70, critical: false, high: false },
-  { pct: 45, critical: false, high: false },
-  { pct: 30, critical: false, high: false },
-  { pct: 65, critical: false, high: false },
-  { pct: 90, critical: false, high: true  },
-  { pct: 50, critical: false, high: false },
-  { pct: 40, critical: false, high: false },
-  { pct: 75, critical: false, high: false },
-  { pct: 60, critical: false, high: false },
-  { pct: 80, critical: true,  high: false },
-  { pct: 45, critical: false, high: false },
-]
-
-const tableData = [
-  { id: 'PRC-9921', label: 'SQL Injection Attempt',   severity: 'Critical' as const, confidence: '98.2%', timestamp: '2023-10-31 14:22:05' },
-  { id: 'PRC-9918', label: 'Anomalous Data Export',   severity: 'High'     as const, confidence: '84.5%', timestamp: '2023-10-31 12:45:12' },
-  { id: 'PRC-9915', label: 'Brute Force Attack',      severity: 'Medium'   as const, confidence: '92.1%', timestamp: '2023-10-31 10:15:33' },
-  { id: 'PRC-9912', label: 'Unauthorized VPN Login',  severity: 'Low'      as const, confidence: '76.8%', timestamp: '2023-10-31 09:02:11' },
-  { id: 'PRC-9909', label: 'Malware Execution Blocked',severity: 'Critical' as const, confidence: '99.9%', timestamp: '2023-10-30 22:15:45' },
-]
-
-const severityConfig = {
-  Critical: { color: '#DC2626', bg: '#FEF2F2', border: '#FECACA', text: '#991B1B', bar: '#DC2626' },
-  High:     { color: '#F97316', bg: '#FFF7ED', border: '#FED7AA', text: '#9A3412', bar: '#F97316' },
-  Medium:   { color: '#D97706', bg: '#FFFBEB', border: '#FDE68A', text: '#92400E', bar: '#FACC15' },
-  Low:      { color: '#6B7280', bg: '#F9FAFB', border: '#E5E7EB', text: '#374151', bar: '#9CA3AF' },
+function StatCard({ label, value, icon, color, sublabel }: StatCardProps) {
+  return (
+    <div className="p-card px-5 py-4 flex items-center gap-4">
+      <div
+        className="flex items-center justify-center rounded-xl"
+        style={{ width: 44, height: 44, background: `${color}18` }}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: 22, color }}>
+          {icon}
+        </span>
+      </div>
+      <div>
+        <p style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          {label}
+        </p>
+        <p style={{ fontSize: 26, fontWeight: 700, color: '#1E1E1E', lineHeight: 1.1 }}>
+          {value}
+        </p>
+        {sublabel && (
+          <p style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>{sublabel}</p>
+        )}
+      </div>
+    </div>
+  )
 }
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function groupByHour(events: DetectionEvent[]) {
+  const map: Record<string, number> = {}
+  events.forEach((e) => {
+    const hour = new Date(e.timestamp).toLocaleTimeString('en-US', {
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    })
+    map[hour] = (map[hour] ?? 0) + 1
+  })
+  return Object.entries(map)
+    .map(([time, count]) => ({ time, count }))
+    .slice(-12)
+}
+
+function groupBySeverity(events: DetectionEvent[]) {
+  const map: Record<string, number> = { low: 0, medium: 0, high: 0, critical: 0 }
+  events.forEach((e) => { map[e.severity] = (map[e.severity] ?? 0) + 1 })
+  return Object.entries(map).map(([name, value]) => ({ name, value }))
+}
+
+function groupByLabel(events: DetectionEvent[]) {
+  const map: Record<string, number> = {}
+  events.forEach((e) => { map[e.label] = (map[e.label] ?? 0) + 1 })
+  return Object.entries(map)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([label, count]) => ({ label, count }))
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export default function Analytics() {
-  const [stats, setStats] = useState(defaultStats)
-  const [events, setEvents] = useState(tableData)
-  const [chartData, setChartData] = useState(chartBars)
-  const [chartPeriod, setChartPeriod] = useState<'Daily' | 'Weekly'>('Daily')
-  const [hoveredBar, setHoveredBar] = useState<number | null>(null)
+  const [stats, setStats]       = useState<EventsStats | null>(null)
+  const [events, setEvents]     = useState<DetectionEvent[]>([])
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState<string | null>(null)
 
   useEffect(() => {
-    let cancelled = false
-    getReports()
-      .then((res) => {
-        if (cancelled) return
-        if (res.stats) setStats(res.stats)
-        if (res.events?.length) {
-          setEvents(res.events.map((e) => ({
-            id: e.id ?? 'N/A',
-            label: e.label,
-            severity: e.severity as 'Critical' | 'High' | 'Medium' | 'Low',
-            confidence: (e.confidence * 100).toFixed(1) + '%',
-            timestamp: new Date(e.timestamp).toLocaleString('en-US', {
-              year: 'numeric', month: '2-digit', day: '2-digit',
-              hour: '2-digit', minute: '2-digit', second: '2-digit',
-            }),
-          })))
-        }
-        if (res.chart?.length) {
-          setChartData(res.chart.map((c) => ({
-            pct: Math.min(Math.round(c.count * 10), 100),
-            critical: c.severity === 'Critical',
-            high: c.severity === 'High',
-          })))
-        }
-      })
-      .catch(() => {})
-    return () => { cancelled = true }
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        const [statsRes, eventsRes] = await Promise.all([
+          getStats(),
+          getEvents({ limit: 200, page: 1 }),
+        ])
+        setStats(statsRes.stats)
+        setEvents(eventsRes.data)
+      } catch {
+        setError('Failed to load analytics. Is the backend running?')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
   }, [])
 
-  const kpiCards = [
-    {
-      icon: 'security', label: 'Total Incidents',
-      value: stats.total_incidents.toLocaleString(),
-      sub: `${Math.abs(stats.incident_trend)}% vs last month`,
-      subIcon: 'trending_down', subColor: '#10B981',
-      accent: '#D4A017', accentBg: '#FFFBEB',
-    },
-    {
-      icon: 'verified_user', label: 'Avg. Confidence',
-      value: `${stats.avg_confidence}%`,
-      sub: 'Detection accuracy', subIcon: 'analytics', subColor: '#6B7280',
-      accent: '#10B981', accentBg: '#F0FDF4',
-    },
-    {
-      icon: 'crisis_alert', label: 'Critical Alerts',
-      value: String(stats.critical_alerts).padStart(2, '0'),
-      sub: 'Requires immediate action', subIcon: 'warning', subColor: '#DC2626',
-      accent: '#DC2626', accentBg: '#FEF2F2', live: true,
-    },
-    {
-      icon: 'timer', label: 'Active Uptime',
-      value: '14d 6h',
-      sub: `${stats.active_time_hours}h total`, subIcon: 'check_circle', subColor: '#10B981',
-      accent: '#6366F1', accentBg: '#EEF2FF',
-    },
-  ]
+  const hourlyData   = groupByHour(events)
+  const severityData = groupBySeverity(events)
+  const labelData    = groupByLabel(events)
 
   return (
-    <div style={{ backgroundColor: '#F8F8F6', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+    <DashboardLayout
+      title="Analytics"
+      subtitle="System Performance & Threat Intelligence"
+    >
+      {/* Error */}
+      {error && (
+        <div
+          className="mb-5 px-4 py-3 rounded-lg flex items-center gap-2"
+          style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', fontSize: 13 }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>error</span>
+          {error}
+        </div>
+      )}
 
-      <Sidebar />
-
-      <div style={{ marginLeft: '256px', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-
-        {/* Top Bar */}
-        <header style={{
-          position: 'sticky', top: 0, zIndex: 40,
-          height: '64px', backgroundColor: 'rgba(248,248,246,0.97)',
-          backdropFilter: 'blur(12px)', borderBottom: '1px solid #E5E7EB',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '0 32px',
-        }}>
-          <div>
-            <h1 style={{ fontSize: '18px', fontWeight: 700, color: '#1E1E1E', margin: 0, letterSpacing: '-0.01em' }}>
-              Analytics
-            </h1>
-            <p style={{ fontSize: '12px', color: '#6B7280', margin: 0 }}>System performance overview</p>
-          </div>
-          <button style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            padding: '8px 16px', backgroundColor: '#1E1E1E', color: '#FFFFFF',
-            border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
-          }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
-            Download Report
-          </button>
-        </header>
-
-        <main style={{ padding: '28px 32px 48px', flex: 1 }}>
-
-          {/* KPI Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }}>
-            {kpiCards.map((card) => (
-              <div key={card.label} style={{
-                backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px',
-                padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{
-                    width: '40px', height: '40px', borderRadius: '10px',
-                    backgroundColor: card.accentBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '20px', color: card.accent, fontVariationSettings: "'FILL' 1" }}>
-                      {card.icon}
-                    </span>
-                  </div>
-                  {card.live && (
-                    <span style={{
-                      display: 'flex', alignItems: 'center', gap: '4px',
-                      fontSize: '11px', fontWeight: 700, color: '#DC2626',
-                      backgroundColor: '#FEF2F2', padding: '3px 8px', borderRadius: '20px',
-                    }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#DC2626', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-                      LIVE
-                    </span>
-                  )}
-                </div>
-                <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 4px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  {card.label}
-                </p>
-                <p style={{ fontSize: '28px', fontWeight: 800, color: '#1E1E1E', margin: '0 0 8px', letterSpacing: '-0.02em', lineHeight: 1 }}>
-                  {card.value}
-                </p>
-                <p style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: card.subColor, margin: 0 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>{card.subIcon}</span>
-                  {card.sub}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Bar Chart */}
-          <div style={{
-            backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px',
-            padding: '24px', marginBottom: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1E1E1E', margin: '0 0 4px' }}>Incident Frequency</h3>
-                <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>Aggregated threat activity — last 30 days</p>
-              </div>
-              <div style={{ display: 'flex', gap: '4px', backgroundColor: '#F3F4F6', borderRadius: '8px', padding: '4px' }}>
-                {(['Daily', 'Weekly'] as const).map((p) => (
-                  <button key={p} onClick={() => setChartPeriod(p)} style={{
-                    padding: '5px 14px', borderRadius: '6px', fontSize: '12px', fontWeight: 600,
-                    cursor: 'pointer', border: 'none',
-                    backgroundColor: chartPeriod === p ? '#FFFFFF' : 'transparent',
-                    color: chartPeriod === p ? '#1E1E1E' : '#6B7280',
-                    boxShadow: chartPeriod === p ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                    transition: 'all 0.15s ease',
-                  }}>{p}</button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
-              {[{ color: '#D1D5DB', label: 'Low / Medium' }, { color: '#F97316', label: 'High' }, { color: '#DC2626', label: 'Critical' }].map(({ color, label }) => (
-                <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#6B7280' }}>
-                  <span style={{ width: '10px', height: '10px', borderRadius: '2px', backgroundColor: color, display: 'inline-block' }} />
-                  {label}
-                </span>
-              ))}
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '180px', position: 'relative', paddingLeft: '32px' }}>
-              {[100, 75, 50, 25].map((y) => (
-                <div key={y} style={{
-                  position: 'absolute', left: 0, right: 0, bottom: `${y}%`,
-                  borderTop: '1px dashed #F3F4F6', pointerEvents: 'none',
-                }}>
-                  <span style={{ position: 'absolute', left: 0, top: '-8px', fontSize: '10px', color: '#D1D5DB' }}>{y}</span>
-                </div>
-              ))}
-              {chartData.map((bar, i) => {
-                const base = bar.critical ? '#DC2626' : bar.high ? '#F97316' : '#D1D5DB'
-                const hover = bar.critical ? '#B91C1C' : bar.high ? '#EA580C' : '#9CA3AF'
-                return (
-                  <div
-                    key={i}
-                    onMouseEnter={() => setHoveredBar(i)}
-                    onMouseLeave={() => setHoveredBar(null)}
-                    style={{
-                      flex: 1, height: `${bar.pct}%`, borderRadius: '4px 4px 0 0',
-                      backgroundColor: hoveredBar === i ? hover : base,
-                      transition: 'background-color 0.15s ease', cursor: 'default', position: 'relative',
-                    }}
-                  >
-                    {hoveredBar === i && (
-                      <div style={{
-                        position: 'absolute', bottom: 'calc(100% + 6px)', left: '50%', transform: 'translateX(-50%)',
-                        backgroundColor: '#1E1E1E', color: '#FFFFFF', fontSize: '11px', fontWeight: 600,
-                        padding: '4px 8px', borderRadius: '6px', whiteSpace: 'nowrap', zIndex: 10,
-                      }}>
-                        {bar.pct} incidents
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #F3F4F6' }}>
-              {['Oct 01', 'Oct 08', 'Oct 15', 'Oct 22', 'Oct 30'].map((d) => (
-                <span key={d} style={{ fontSize: '11px', color: '#9CA3AF' }}>{d}</span>
-              ))}
-            </div>
-          </div>
-
-          {/* Table */}
-          <div style={{
-            backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px',
-            overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-          }}>
-            <div style={{
-              padding: '18px 24px', borderBottom: '1px solid #E5E7EB',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            }}>
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#1E1E1E', margin: '0 0 2px' }}>Incident History</h3>
-                <p style={{ fontSize: '13px', color: '#6B7280', margin: 0 }}>Detailed log of all detected events</p>
-              </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {[{ icon: 'filter_list', label: 'Filter' }, { icon: 'sort', label: 'Sort' }].map(({ icon, label }) => (
-                  <button key={label} style={{
-                    display: 'flex', alignItems: 'center', gap: '4px',
-                    padding: '7px 12px', fontSize: '13px', fontWeight: 500,
-                    color: '#374151', backgroundColor: '#F9FAFB',
-                    border: '1px solid #E5E7EB', borderRadius: '8px', cursor: 'pointer',
-                  }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>{icon}</span>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ backgroundColor: '#F9FAFB' }}>
-                    {['ID', 'Incident Label', 'Severity', 'Confidence', 'Timestamp', ''].map((h) => (
-                      <th key={h} style={{
-                        padding: '11px 20px', textAlign: 'left', fontSize: '11px',
-                        fontWeight: 700, color: '#6B7280', textTransform: 'uppercase',
-                        letterSpacing: '0.06em', borderBottom: '1px solid #E5E7EB',
-                      }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((row, idx) => {
-                    const cfg = severityConfig[row.severity]
-                    return (
-                      <tr
-                        key={row.id}
-                        style={{ borderBottom: idx < events.length - 1 ? '1px solid #F3F4F6' : 'none' }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.backgroundColor = '#FAFAFA' }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.backgroundColor = 'transparent' }}
-                      >
-                        <td style={{ padding: '13px 20px', fontFamily: 'monospace', fontSize: '13px', color: '#D4A017', fontWeight: 600 }}>{row.id}</td>
-                        <td style={{ padding: '13px 20px', fontSize: '14px', color: '#1E1E1E', fontWeight: 500 }}>{row.label}</td>
-                        <td style={{ padding: '13px 20px' }}>
-                          <span style={{
-                            fontSize: '10px', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
-                            color: cfg.text, backgroundColor: cfg.bg, padding: '3px 8px',
-                            borderRadius: '4px', border: `1px solid ${cfg.border}`,
-                          }}>{row.severity}</span>
-                        </td>
-                        <td style={{ padding: '13px 20px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <div style={{ width: '60px', height: '4px', backgroundColor: '#F3F4F6', borderRadius: '2px' }}>
-                              <div style={{ height: '100%', borderRadius: '2px', backgroundColor: cfg.bar, width: row.confidence }} />
-                            </div>
-                            <span style={{ fontSize: '13px', color: '#374151', fontWeight: 600 }}>{row.confidence}</span>
-                          </div>
-                        </td>
-                        <td style={{ padding: '13px 20px', fontSize: '13px', color: '#6B7280' }}>{row.timestamp}</td>
-                        <td style={{ padding: '13px 20px' }}>
-                          <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', display: 'flex', alignItems: 'center' }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>visibility</span>
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div style={{ padding: '14px 24px', borderTop: '1px solid #F3F4F6', display: 'flex', justifyContent: 'center' }}>
-              <button style={{
-                fontSize: '13px', fontWeight: 500, color: '#6B7280',
-                backgroundColor: 'transparent', border: 'none', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: '4px',
-              }}>
-                Load more entries
-                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>expand_more</span>
-              </button>
-            </div>
-          </div>
-        </main>
+      {/* Stats cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <StatCard
+          label="Total Events"
+          value={loading ? '…' : (stats?.total ?? 0)}
+          icon="sensors"
+          color="#6366f1"
+          sublabel="all time"
+        />
+        <StatCard
+          label="Today"
+          value={loading ? '…' : (stats?.today ?? 0)}
+          icon="today"
+          color="#0ea5e9"
+          sublabel="last 24h"
+        />
+        <StatCard
+          label="Critical"
+          value={loading ? '…' : (stats?.critical ?? 0)}
+          icon="emergency"
+          color="#dc2626"
+        />
+        <StatCard
+          label="High"
+          value={loading ? '…' : (stats?.high ?? 0)}
+          icon="warning"
+          color="#f97316"
+        />
+        <StatCard
+          label="Medium"
+          value={loading ? '…' : (stats?.medium ?? 0)}
+          icon="info"
+          color="#facc15"
+        />
       </div>
 
-      <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }`}</style>
-    </div>
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+
+        {/* Detections over time */}
+        <div className="p-card px-5 py-4 lg:col-span-2">
+          <h2 className="font-semibold mb-4" style={{ fontSize: 14, color: '#1E1E1E' }}>
+            Detections Over Time
+          </h2>
+          {loading ? (
+            <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+              Loading…
+            </div>
+          ) : hourlyData.length === 0 ? (
+            <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+              No data yet
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={hourlyData} margin={{ top: 4, right: 4, bottom: 4, left: -20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+                <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#9CA3AF' }} />
+                <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={{ fontSize: 12, borderRadius: 6, border: '1px solid #E5E7EB' }}
+                />
+                <Bar dataKey="count" fill="#D4A017" radius={[3, 3, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+
+        {/* Severity breakdown */}
+        <div className="p-card px-5 py-4">
+          <h2 className="font-semibold mb-4" style={{ fontSize: 14, color: '#1E1E1E' }}>
+            Severity Breakdown
+          </h2>
+          {loading ? (
+            <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+              Loading…
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={severityData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={80}
+                  paddingAngle={3}
+                  dataKey="value"
+                >
+                  {severityData.map((entry) => (
+                    <Cell key={entry.name} fill={severityColor(entry.name)} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ fontSize: 12, borderRadius: 6, border: '1px solid #E5E7EB' }}
+                />
+                <Legend
+                  formatter={(value) => (
+                    <span style={{ fontSize: 11, textTransform: 'capitalize', color: '#374151' }}>
+                      {value}
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </div>
+
+      {/* Top detected labels */}
+      <div className="p-card px-5 py-4">
+        <h2 className="font-semibold mb-4" style={{ fontSize: 14, color: '#1E1E1E' }}>
+          Top Detected Objects
+        </h2>
+        {loading ? (
+          <div style={{ height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+            Loading…
+          </div>
+        ) : labelData.length === 0 ? (
+          <div style={{ height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: 13 }}>
+            No data yet
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart
+              data={labelData}
+              layout="vertical"
+              margin={{ top: 4, right: 20, bottom: 4, left: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 10, fill: '#9CA3AF' }} allowDecimals={false} />
+              <YAxis
+                type="category"
+                dataKey="label"
+                tick={{ fontSize: 11, fill: '#374151', textTransform: 'capitalize' }}
+                width={80}
+              />
+              <Tooltip
+                contentStyle={{ fontSize: 12, borderRadius: 6, border: '1px solid #E5E7EB' }}
+              />
+              <Bar dataKey="count" fill="#6366f1" radius={[0, 3, 3, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+    </DashboardLayout>
   )
 }

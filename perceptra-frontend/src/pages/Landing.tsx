@@ -1,7 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom'
 
 const LOGO_URL =
-'../../public/favicon.svg'
+'https://perceptra-phi.vercel.app/favicon.svg'
 const HERO_BG =
 'https://images.pexels.com/photos/6570858/pexels-photo-6570858.jpeg?_gl=1*m3ohn*_ga*OTQ2OTIwMDY5LjE3Nzc3MTUzMDA.*_ga_8JE65Q40S6*czE3ODEyNTE4MDIkbzUkZzEkdDE3ODEyNTMwNzckajQ2JGwwJGgw'
 const FEED_IMG_1 =
