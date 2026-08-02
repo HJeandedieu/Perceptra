@@ -1,11 +1,11 @@
 {
   "name": "perceptra-backend",
   "version": "1.0.0",
-  "description": "Perceptra AI Surveillance — Backend API",
+  "description": "Perceptra AI Surveillance \u2014 Backend API",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "node init && node src/server.js",
+    "dev": "node init && nodemon src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
@@ -31,9 +31,11 @@
     "supertest": "^7.0.0"
   },
   "jest": {
-  "transform": {},
-  "extensionsToTreatAsEsm": [".js"],
-  "testEnvironment": "node"
-},
-"type": "module"
+    "transform": {},
+    "extensionsToTreatAsEsm": [
+      ".js"
+    ],
+    "testEnvironment": "node"
+  },
+  "type": "module"
 }
