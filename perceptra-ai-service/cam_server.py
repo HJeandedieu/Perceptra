@@ -1,16 +1,23 @@
+# cam_server.py
 import cv2
 from flask import Flask, Response
 
 app = Flask(__name__)
-cap = cv2.VideoCapture(1)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+
+def get_cap():
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    return cap
 
 def generate():
+    cap = get_cap()
     while True:
         ret, frame = cap.read()
         if not ret:
-            break
+            cap.release()
+            cap = get_cap()
+            continue
         _, buffer = cv2.imencode('.jpg', frame)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n'
