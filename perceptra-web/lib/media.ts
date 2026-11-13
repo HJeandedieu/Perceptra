@@ -1,0 +1,8 @@
+import {ApiError} from './api';
+import {AccessToken,RoomServiceClient,TrackSource} from 'livekit-server-sdk';import {randomUUID} from 'node:crypto';
+export const remoteWorker=()=>process.env.VERCEL==='1'||process.env.WORKER_CONNECTION==='outbound';
+export const transport=()=>process.env.STREAM_TRANSPORT==='livekit'?'livekit':remoteWorker()?'unconfigured':'local';
+export function mediaConfiguration(){const url=process.env.LIVEKIT_URL,key=process.env.LIVEKIT_API_KEY,secret=process.env.LIVEKIT_API_SECRET,room=process.env.LIVEKIT_ROOM;if(!url||!key||!secret||!room)throw new ApiError(503,'Remote video is not configured');if(!url.startsWith('wss://'))throw new ApiError(503,'LiveKit requires a secure WebSocket endpoint');return {url,key,secret,room}}
+export async function mediaToken(identity:string,publisher=false){const c=mediaConfiguration();const token=new AccessToken(c.key,c.secret,{identity,ttl:'5m'});token.addGrant({roomJoin:true,room:c.room,canPublish:publisher,canSubscribe:!publisher,canPublishData:false,...(publisher?{canPublishSources:[TrackSource.CAMERA]}:{})});return {url:c.url,token:await token.toJwt(),room:c.room,identity}}
+export const viewerIdentity=(userId:string)=>userId+':'+randomUUID();
+export async function disconnectOperator(userId:string){if(transport()!=='livekit')return;const c=mediaConfiguration();const client=new RoomServiceClient(c.url.replace(/^wss:/,'https:'),c.key,c.secret);const participants=await client.listParticipants(c.room).catch((e:unknown)=>{if(e&&typeof e==='object'&&'code' in e&&e.code==='not_found')return [];throw e});await Promise.all(participants.filter(p=>p.identity.startsWith(userId+':')).map(p=>client.removeParticipant(c.room,p.identity,{revokeTokenTs:BigInt(Math.floor(Date.now()/1000))})))}

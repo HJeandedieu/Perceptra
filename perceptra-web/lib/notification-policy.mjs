@@ -1,0 +1,1 @@
+export function shouldAlert(incident,seen){return ['NEW','ACKNOWLEDGED'].includes(incident.status)&&['CREATED','ESCALATED'].includes(incident.activities?.[0]?.action)&&!seen.has(incident.id+':'+incident.severity)}

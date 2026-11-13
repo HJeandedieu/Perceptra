@@ -1,0 +1,2 @@
+import {authorize,failure,ApiError} from '../../../../lib/api';import {db} from '../../../../lib/db';
+export async function GET(request:Request,{params}:{params:Promise<{id:string}>}){try{await authorize(request);const incident=await db.incident.findUnique({where:{id:(await params).id},include:{camera:true,activities:{orderBy:{createdAt:'asc'}}}});if(!incident)throw new ApiError(404,'Incident not found');return Response.json({incident},{headers:{'Cache-Control':'no-store'}})}catch(e){return failure(e)}}

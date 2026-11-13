@@ -1,0 +1,2 @@
+import {serviceAuth,failure,ApiError} from '../../../../lib/api';import {camera} from '../../../../lib/camera';import {mediaToken,transport} from '../../../../lib/media';
+export async function POST(request:Request){try{serviceAuth(request);if(transport()!=='livekit')throw new ApiError(409,'Remote video disabled');const config=await camera();if(!config.viewerUntil||config.viewerUntil<new Date())throw new ApiError(409,'No active viewer');return Response.json(await mediaToken('camera-01',true),{headers:{'Cache-Control':'no-store'}})}catch(e){return failure(e)}}

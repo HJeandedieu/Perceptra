@@ -1,0 +1,10 @@
+import {createHmac,timingSafeEqual} from 'node:crypto';
+import {cookies} from 'next/headers';
+import {db} from './db';
+const name='perceptra_session';
+function secret(){const s=process.env.SESSION_SECRET;if(!s||s.length<32)throw new Error('SESSION_SECRET must contain at least 32 characters');return s}
+export function signSession(id:string){const body=Buffer.from(JSON.stringify({id,exp:Date.now()+8*60*60*1000})).toString('base64url');return body+'.'+createHmac('sha256',secret()).update(body).digest('base64url')}
+export async function currentUser(){const token=(await cookies()).get(name)?.value;if(!token)return null;try{const [body,signature,...rest]=token.split('.');if(rest.length||!body||!signature)return null;const expected=createHmac('sha256',secret()).update(body).digest();const actual=Buffer.from(signature,'base64url');if(actual.length!==expected.length||!timingSafeEqual(actual,expected))return null;const payload=JSON.parse(Buffer.from(body,'base64url').toString());if(typeof payload.id!=='string'||typeof payload.exp!=='number'||payload.exp<Date.now())return null;return await db.user.findUnique({where:{id:payload.id},select:{id:true,name:true,email:true,role:true}})}catch{return null}}
+export async function setSession(id:string){(await cookies()).set(name,signSession(id),{httpOnly:true,sameSite:'strict',secure:process.env.VERCEL==='1'||process.env.COOKIE_SECURE==='true',path:'/',maxAge:8*60*60})}
+export async function clearSession(){(await cookies()).delete(name)}
+export function validOrigin(request:Request){if(process.env.VERCEL==='1'&&!process.env.APP_ORIGIN)return false;const origin=request.headers.get('origin');if(!origin)return false;try{const expected=new URL(process.env.APP_ORIGIN||new URL(request.url).origin);const actual=new URL(origin);if(actual.origin===expected.origin)return true;const loopback=['localhost','127.0.0.1'];return loopback.includes(expected.hostname)&&loopback.includes(actual.hostname)&&actual.protocol===expected.protocol&&actual.port===expected.port}catch{return false}}

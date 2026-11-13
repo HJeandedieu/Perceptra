@@ -1,0 +1,2 @@
+import {Heading} from '../../../components/workspace';import {Analytics} from '../../../components/analytics';import {LiveCamera} from '../../../components/live-camera';import {IncidentList} from '../../../components/incidents';
+export default function Page(){return <><Heading title="Station overview" description="Live station health and saved incident activity."/><Analytics/><LiveCamera/><h2>Recent incidents</h2><IncidentList/></>}

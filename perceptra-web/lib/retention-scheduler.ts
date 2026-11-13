@@ -1,0 +1,3 @@
+import {db} from './db';import {sweep} from './retention.mjs';
+const state=globalThis as unknown as {retentionTimer?:ReturnType<typeof setInterval>;retentionRunning?:boolean};
+export function startRetention(){if(state.retentionTimer)return;async function run(){if(state.retentionRunning)return;state.retentionRunning=true;try{const result=await sweep(db);if(result.count)console.info('Retention removed',result.count,'expired closed incidents')}catch{console.error('Retention unavailable; will retry at the next hourly interval')}finally{state.retentionRunning=false}}state.retentionTimer=setInterval(run,3600000);state.retentionTimer.unref();void run()}

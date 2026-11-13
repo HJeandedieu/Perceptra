@@ -1,0 +1,1 @@
+export async function workerFetch(path:string,signal?:AbortSignal){const token=process.env.SERVICE_TOKEN;if(!token||token.length<32)throw Error('Worker credential not configured');return fetch((process.env.AI_SERVICE_URL||'http://127.0.0.1:8080')+path,{headers:{Authorization:'Bearer '+token},cache:'no-store',signal})}

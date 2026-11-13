@@ -1,0 +1,1 @@
+export async function sweep(db,now=new Date()){const result=await db.incident.deleteMany({where:{status:{in:['RESOLVED','FALSE_ALARM']},resolvedAt:{lt:new Date(now.getTime()-7*86400000)}}});await db.loginRate.deleteMany({where:{expiresAt:{lt:now}}});return result}
