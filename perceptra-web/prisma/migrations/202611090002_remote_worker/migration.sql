@@ -1,0 +1,1 @@
+ALTER TABLE "Camera" ADD COLUMN "health" JSONB, ADD COLUMN "lastHeartbeat" TIMESTAMP(3), ADD COLUMN "viewerUntil" TIMESTAMP(3);

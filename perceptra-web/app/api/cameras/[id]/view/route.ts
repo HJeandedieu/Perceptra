@@ -1,0 +1,2 @@
+import {authorize,failure,ApiError} from '../../../../../lib/api';import {camera} from '../../../../../lib/camera';import {db} from '../../../../../lib/db';
+export async function POST(request:Request,{params}:{params:Promise<{id:string}>}){try{await authorize(request);if((await params).id!=='camera-01')throw new ApiError(404,'Camera not found');await camera();await db.camera.update({where:{id:'camera-01'},data:{viewerUntil:new Date(Date.now()+45000)}});return Response.json({ok:true},{headers:{'Cache-Control':'no-store'}})}catch(e){return failure(e)}}

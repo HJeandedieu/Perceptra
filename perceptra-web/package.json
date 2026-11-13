@@ -1,0 +1,44 @@
+{
+  "name": "perceptra-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node init && next dev --webpack --hostname 127.0.0.1 -p 5000",
+    "build": "node init && next build --webpack",
+    "start": "node init && next start --hostname 127.0.0.1 -p 5000",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "node --env-file=.env.local node_modules/prisma/build/index.js migrate deploy",
+    "admin:create": "node --env-file=.env.local scripts/bootstrap-admin.mjs",
+    "test:smoke": "node scripts/smoke-test.mjs",
+    "test:reports": "node --test scripts/report-utils.test.mjs",
+    "retention": "node --env-file=.env.local scripts/retention.mjs",
+    "db:start": "node --env-file=.env.local scripts/local-db.mjs start",
+    "db:stop": "node --env-file=.env.local scripts/local-db.mjs stop",
+    "test:integration": "node --env-file=.env.local scripts/integration-test.mjs",
+    "test:camera": "node --env-file=.env.local scripts/verify-worker.mjs",
+    "test:soak": "node --env-file=.env.local scripts/soak-test.mjs",
+    "test:notifications": "node --test scripts/notification-policy.test.mjs",
+    "build:vercel": "node init && prisma generate && next build --webpack",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "test:cloud": "node --env-file=.env.local scripts/cloud-test.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "livekit-client": "2.23.0",
+    "livekit-server-sdk": "2.19.2",
+    "lucide-react": "^0.468.0",
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prisma": "^5.22.0",
+    "typescript": "^5.9.0"
+  }
+}

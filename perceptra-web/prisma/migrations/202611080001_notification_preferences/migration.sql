@@ -1,0 +1,1 @@
+ALTER TABLE "User" ADD COLUMN "notificationInApp" BOOLEAN NOT NULL DEFAULT true, ADD COLUMN "notificationDesktop" BOOLEAN NOT NULL DEFAULT false, ADD COLUMN "notificationSound" BOOLEAN NOT NULL DEFAULT false;

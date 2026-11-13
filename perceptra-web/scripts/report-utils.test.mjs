@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {csvCell,summarize} from '../lib/report-utils.mjs';
+test('CSV neutralizes formulas and quotes',()=>{assert.equal(csvCell('=SUM(A1)'),`"'=SUM(A1)"`);assert.equal(csvCell('  +1'),`"'  +1"`);assert.equal(csvCell('a"b'),`"a""b"`)});
+test('Summaries count incidents and compute median seconds',()=>{const d='2026-11-07T00:00:00Z';const rows=[{firstSeen:d,acknowledgedAt:'2026-11-07T00:00:20Z',severity:'medium',status:'ACKNOWLEDGED'},{firstSeen:d,acknowledgedAt:'2026-11-07T00:00:40Z',severity:'high',status:'FALSE_ALARM'}];const r=summarize(rows);assert.equal(r.total,2);assert.equal(r.open,1);assert.equal(r.falseAlarms,1);assert.equal(r.medianResponseSeconds,30);assert.equal(r.daily[0].count,2)});
+test('Empty reports have no fabricated response time',()=>assert.equal(summarize([]).medianResponseSeconds,null));

@@ -1,0 +1,3 @@
+import {PrismaClient} from '@prisma/client';import bcrypt from 'bcryptjs';import {randomBytes} from 'node:crypto';
+const db=new PrismaClient();const email=process.argv[2],name=process.argv[3];
+try{if(!email||!name)throw Error('Email and name required');const existing=await db.user.findUnique({where:{email}});if(existing){if(existing.role!=='ADMIN')throw Error('Existing account is not an administrator; refusing silent privilege change');console.log('Administrator already exists; password unchanged.')}else{await db.user.create({data:{email,name,role:'ADMIN',password:await bcrypt.hash(randomBytes(48).toString('hex'),12)}});console.log('Administrator created. Set a password locally before signing in.')}}finally{await db.$disconnect()}

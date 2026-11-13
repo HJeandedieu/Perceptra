@@ -1,0 +1,3 @@
+import {timingSafeEqual} from 'node:crypto';import {db} from '../../../../lib/db';import {sweep} from '../../../../lib/retention.mjs';
+export const runtime='nodejs';
+export async function GET(request:Request){const secret=process.env.CRON_SECRET||'';const actual=request.headers.get('authorization')||'';const expected='Bearer '+secret;const a=Buffer.from(actual),b=Buffer.from(expected);if(secret.length<32||a.length!==b.length||!timingSafeEqual(a,b))return Response.json({error:'Unauthorized'},{status:401});try{return Response.json(await sweep(db),{headers:{'Cache-Control':'no-store'}})}catch{return Response.json({error:'Retention unavailable'},{status:503})}}

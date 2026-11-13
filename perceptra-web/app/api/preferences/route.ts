@@ -1,0 +1,4 @@
+import {authorize,failure,jsonBody,ApiError} from '../../../lib/api';import {db} from '../../../lib/db';
+const select={notificationInApp:true,notificationDesktop:true,notificationSound:true};
+export async function GET(request:Request){try{const user=await authorize(request);return Response.json({preferences:await db.user.findUniqueOrThrow({where:{id:user.id},select})},{headers:{'Cache-Control':'no-store'}})}catch(e){return failure(e)}}
+export async function PATCH(request:Request){try{const user=await authorize(request);const b=await jsonBody(request);if(!b||typeof b!=='object'||Array.isArray(b)||!Object.keys(b).length||Object.entries(b).some(([key,value])=>!Object.keys(select).includes(key)||typeof value!=='boolean'))throw new ApiError(400,'Only boolean notification preferences are accepted');return Response.json({preferences:await db.user.update({where:{id:user.id},data:b,select})})}catch(e){return failure(e)}}
